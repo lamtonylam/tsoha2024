@@ -1,10 +1,10 @@
 # tsoha2024
 
-- Paninitracker websovellus, jossa käyttäjät raportoivat paninien saatavuuden Physicumin Unicafesta.
-- Sovelluksesta näkee, kuka käyttäjänimi on raportoinut ja milloin on raportoitu viimeksi paninisaatavuuden.
-- Käyttäjät kirjautuvat sisään raportoidaakseen saatavuuden, rekisteröityminen on mahdollista.
-- Panineista on saatavilla tärkeät ravintotiedot, kuten energiamäärä sekä rasvan määrä.
-- Panineista on mahdollista kirjoittaa kommentteja, esimerkiksi "kanapanini on mun suosikki"
+- Paninitracker web application where users report the availability of paninis from Physicum's Unicafe.
+- The application shows who has reported by user name and when they last reported panini availability.
+- Users log in to report availability, registration is possible.
+- Important nutritional information about the panini, such as energy and fat content, is available.
+- It is possible to write comments on the panini, for example "my favourite is my chicken panini".
 
 Mockup
 
