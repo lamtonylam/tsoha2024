@@ -8,11 +8,11 @@
 
     <form action="/send" method="POST">
         <br>
-        <input type="text" class="form-control" id="nimi" placeholder="Haalarimerkin nimi:">
+        <input type="text" class="form-control" id="nimi" name="nimi" placeholder="Haalarimerkin nimi:" required>
         <br>
-        <input type="radio" id="tapahtuma" name="tapahtuma_vai_ostettu" value="tapahtuma">
+        <input type="radio" id="tapahtuma" name="hankintapaikka" value="tapahtuma" required>
         <label for="tapahtuma">Tapahtuma</label><br>
-        <input type="radio" id="ostettu" name="tapahtuma_vai_ostettu" value="ostettu">
+        <input type="radio" id="ostettu" name="hankintapaikka" value="ostettu" required>
         <label for="ostettu">Ostettu</label>
         <br>
         <input type="submit" class="btn btn-primary" value="Lähetä">

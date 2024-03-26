@@ -1,7 +1,13 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<hr>
+    {% for result in results %}
+        {{ result }}
+<hr>
+{% endfor %}
 
 
+<a href="/new">Lisää uusi</a>
 
 {% endblock %}

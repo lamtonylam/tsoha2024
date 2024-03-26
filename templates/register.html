@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<form action="/register" method="post">
+    <div class="mb-3">
+    Tunnus: <input type="text" name="username" class="form-control">
+    <p>
+    Salasana: <input type="password" name="password1" class="form-control">
+    <p>
+    Salasana uudestaan: <input type="password" name="password2" class="form-control">
+    <p>
+    <input type="submit" value="Luo tunnus">
+</div>
+
+</form>
+
+{% endblock %}
