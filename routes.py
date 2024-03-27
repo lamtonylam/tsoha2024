@@ -40,12 +40,22 @@ def register_get():
 def register():
     if request.method == "GET":
         return render_template("register.html")
+    
     if request.method == "POST":
         username = request.form["username"]
+        if len(username) < 0:
+            return render_template("error.html", message="Käyttäjätunnus ei saa olla tyhjä")
+        if " " in username:
+            return render_template("error.html", message="Käyttäjätunnus ei saa sisältää välilyöntejä")
+
         password1 = request.form["password1"]
         password2 = request.form["password2"]
         if password1 != password2:
             return render_template("error.html", message="Salasanat eroavat")
+        if " " in password1:
+            return render_template("error.html", message="Salasana ei saa sisältää välilyöntejä")
+        if len(password1) < 8:
+            return render_template("error.html", message="Salasanan pituuden tulee olla vähintään 8 merkkiä")
         if users.register(username, password1):
             return redirect("/kirjautunut")
         else:
