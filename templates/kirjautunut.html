@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
+<p>Olet kirjautunut nimellä {{ session.username }}</p>
+
 <hr>
     {% for result in results %}
         {{ result }}
@@ -9,5 +12,9 @@
 
 
 <a href="/new">Lisää uusi</a>
+
+<br>
+
+<a href="/logout">Kirjaudu ulos</a>
 
 {% endblock %}
