@@ -2,7 +2,25 @@
 
 {% block content %}
 
+
+{% if session.username %}
+
 <p>Merkin nimi: {{ nimi }}</p>
+
+
+<form action="/send/new/to_collection" method="POST">
+    <input type="hidden" name="id" value="{{ id }}">
+    <button type="submit" class="btn btn-primary">Lisää merkki kokoelmaasi</button>
+</form>
+{% endif %}
+
+
+
+
+{% if not session.username %}
+<p>Et ole kirjautunut sisään. Kirjaudu sisään, jotta voit lisätä uusia haalarimerkkejä.</p>
+<button onclick="window.location.href='/login'" class="btn btn-primary">Kirjaudu sisään</button>
+{% endif %}
 
 {% endblock %}
 

@@ -5,7 +5,7 @@
 
     <br>
     <div style="text-align: center;">
-        <h1>Welcome haalarimerkkiDEX</h1>
+        <h1>Tervetuloa käyttämään haalarimerkkiDEXiä</h1>
     </div>
 </div>
 
@@ -21,12 +21,12 @@
 
 <!-- jos käyttäjä on kirjautunut sisään  -->
 {% if session.username %}
-    <p>Olet kirjautunut nimellä {{ session.username }}</p>
+    <p>Olet kirjautunut nimellä <b>{{ session.username }}</b></p>
     <p> Unique ID:si on {{session.user_id}}</p>
 
     <br>
 
-    <a href="/logout">Kirjaudu ulos</a>
+    <a href="/logout" class="btn btn-primary">Kirjaudu ulos</a>
 {% endif %}
 
 

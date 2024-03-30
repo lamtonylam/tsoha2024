@@ -8,21 +8,34 @@
 
 
 
-<h4>Merkit</h4>
+<h4>Kaikki merkit</h4>
 
 <hr>
     {% for result in results %}
-        {{ result }}
-        <a href="/merkki/{{ result.id }}">Tietoja</a>
+        <p>Merkin nimi: <b> {{ result.name }}</b></p> 
+        <a href="/merkki/{{ result.id }}">Lisää merkki omaan kokoelmaasi</a>
 <hr>
 {% endfor %}
 
 
-<a href="/new">Lisää uusi</a>
+<h4>Omat merkit:</h4>
+
+<hr>
+    {% for result in own_patches_result %}
+        <p>Merkin nimi: <b> {{ result.name }}</b></p> 
+        <p>Lisätty omaan kokoelmaan: <b>{{result.sent_at.strftime("%Y-%m-%d %H:%M:%S")}}</b></p>
+        <a href="/merkki/{{ result.merkki_id }}">Tietoja</a>
+<hr>
+{% endfor %}
+
+
+
+
+<a href="/new/merkki">Lisää uusi</a>
 
 <br>
-
-<a href="/logout">Kirjaudu ulos</a>
+<br>
+<a href="/logout" class="btn btn-primary">Kirjaudu ulos</a>
 
 {% endif %}
 

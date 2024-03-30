@@ -12,34 +12,47 @@ def index():
 
 @app.route("/kirjautunut")
 def kirjautnut():
-    query = text('SELECT id, nimi FROM Merkit;')
+    query = text('SELECT id, name FROM Patches;')
     result = db.session.execute(query)
     results = result.fetchall()
-    return render_template("kirjautunut.html", results=results)
+
+    user_id = users.user_id()
+    query = text("SELECT Patches.name, UsersToPatches.sent_at, UsersToPatches.merkki_id \
+                FROM Patches, UsersToPatches \
+                WHERE Patches.id = UsersToPatches.merkki_id AND UsersToPatches.user_id = :user_id;")
+    own_patches_result = db.session.execute(query, {"user_id": user_id})
+    return render_template("kirjautunut.html", results=results, own_patches_result=own_patches_result)
 
 @app.route("/merkki/<int:id>")
 def merkki(id):
-    query = text('SELECT nimi FROM Merkit WHERE id = :id;')
+    query = text('SELECT name FROM Patches WHERE id = :id;')
     result = db.session.execute(query, {"id": id})
     nimi = result.fetchone()[0]
-    return render_template("merkki.html", nimi=nimi)
+    return render_template("merkki.html", nimi=nimi, id=id)
 
+# adding a patch from general collection to user's own collection
+@app.route("/send/new/to_collection", methods=["POST"])
+def to_collection():
+    merkki_id = request.form["id"]
+    user_id = users.user_id()
+    sql = text("INSERT INTO UsersToPatches (merkki_id, user_id, sent_at) VALUES (:merkki_id, :user_id, NOW())")
+    db.session.execute(sql, {"merkki_id": merkki_id, "user_id": user_id})
+    db.session.commit()
+    return redirect("/kirjautunut")
 
+# adding patch to general collection for everyone to see
 @app.route("/new/merkki")
 def new():
     return render_template("new_merkki.html")
 
 @app.route("/send/new/merkki", methods=["POST"])
 def send():
-    nimi = request.form.get("nimi")
-    sql = text("INSERT INTO Merkit(nimi) VALUES (:nimi)")  
-    db.session.execute(sql, {"nimi": nimi})
+    name = request.form.get("nimi")
+    sql = text("INSERT INTO Patches(name) VALUES (:name)")  
+    db.session.execute(sql, {"name": name})
     db.session.commit()
     return redirect("/kirjautunut")
 
-@app.route("/register", methods=["GET"])
-def register_get():
-    return render_template("register.html")
 
 @app.route("/register", methods=["GET", "POST"])
 def register():

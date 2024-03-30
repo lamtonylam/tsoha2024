@@ -40,3 +40,6 @@ def register(username, password):
 
 def user_id():
     return session.get("user_id", 0)
+
+def get_username():
+    return session.get("username", "")

@@ -10,7 +10,7 @@
     {% if session.username %}
     <p>Olet kirjautunut nimellä {{ session.username }}</p>
 
-    <form action="/send/new/merkki" method="POST" enctype="multipart/form-data"></form>
+    <form action="/send/new/merkki" method="POST" enctype="multipart/form-data">
         <br>
         <p>Lisääthän mahdollisimman tarkan nimen haalarimerkille!</p>
         <input type="text" class="form-control" id="nimi" name="nimi" placeholder="Haalarimerkin nimi:" required>
