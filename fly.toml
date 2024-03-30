@@ -4,9 +4,19 @@
 #
 
 app = 'haalarimerkkidex'
-primary_region = 'arn'
+primary_region = "arn"
 
 [build]
+
+[env]
+  PORT = "5000"
+
+[[services]]
+  internal_port = 5000
+
+[[services.ports]]
+  handlers = ["http"]
+  port = 80  # Expose your Flask app on port 80 for HTTP traffic
 
 [http_service]
   internal_port = 5000
