@@ -1,0 +1,28 @@
+
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+
+    <b>Tervetuloa</b> <i>sovellukseen</i>!
+
+    {% if session.username %}
+    <p>Olet kirjautunut nimellä {{ session.username }}</p>
+
+    <form action="/send/new/merkki" method="POST" enctype="multipart/form-data"></form>
+        <br>
+        <p>Lisääthän mahdollisimman tarkan nimen haalarimerkille!</p>
+        <input type="text" class="form-control" id="nimi" name="nimi" placeholder="Haalarimerkin nimi:" required>
+        <br>
+        <input type="submit" class="btn btn-primary" value="Lähetä">
+    </form>
+    {% endif %}
+
+    {% if not session.username %}
+    <p>Et ole kirjautunut sisään. Kirjaudu sisään, jotta voit lisätä uusia haalarimerkkejä.</p>
+    <button onclick="window.location.href='/login'" class="btn btn-primary">Kirjaudu sisään</button>
+    {% endif %}
+
+
+{% endblock %}

@@ -1,13 +1,35 @@
-{% extends 'base_wo_menu.html' %}
+<div class="text-center">
+    {% extends 'base.html' %}
 
-{% block content %}
-<br>
-<div style="text-align: center;" class="text-center">
-    <h1>Welcome haalarimerkkiDEX</h1>
+    {% block content %}
+
+    <br>
+    <div style="text-align: center;">
+        <h1>Welcome haalarimerkkiDEX</h1>
+    </div>
+</div>
+
+
+<!-- jos käyttäjä ei ole kirjautunut sisään, näytä kirjautumisnappi -->
+{% if not session.username %}
     <div class="btn-group">
         <a href="/login" class="btn btn-primary btn-important">Sign In</a>
         <span>&nbsp;</span> <!-- Add a space between the buttons -->
         <a href="/register" class="btn btn-primary">Register</a>
     </div>
-</div>
+{% endif %}
+
+<!-- jos käyttäjä on kirjautunut sisään  -->
+{% if session.username %}
+    <p>Olet kirjautunut nimellä {{ session.username }}</p>
+    <p> Unique ID:si on {{session.user_id}}</p>
+
+    <br>
+
+    <a href="/logout">Kirjaudu ulos</a>
+{% endif %}
+
+
+
+
 {% endblock %}

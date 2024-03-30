@@ -2,11 +2,18 @@
 
 {% block content %}
 
+
+{% if session.username %}
 <p>Olet kirjautunut nimellä {{ session.username }}</p>
+
+
+
+<h4>Merkit</h4>
 
 <hr>
     {% for result in results %}
         {{ result }}
+        <a href="/merkki/{{ result.id }}">Tietoja</a>
 <hr>
 {% endfor %}
 
@@ -16,5 +23,12 @@
 <br>
 
 <a href="/logout">Kirjaudu ulos</a>
+
+{% endif %}
+
+{% if not session.username %}
+<p>Et ole kirjautunut sisään. Kirjaudu sisään, jotta voit lisätä uusia haalarimerkkejä.</p>
+<button onclick="window.location.href='/login'" class="btn btn-primary">Kirjaudu sisään</button>
+{% endif %}
 
 {% endblock %}

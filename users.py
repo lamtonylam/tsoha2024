@@ -5,7 +5,7 @@ from sqlalchemy import text
 
 
 def login(username, password):
-    sql = text("SELECT id, password FROM users WHERE username=:username")
+    sql = text("SELECT id, password, username FROM users WHERE username=:username")
     result = db.session.execute(sql, {"username":username})
     user = result.fetchone()
     if not user:
@@ -13,12 +13,20 @@ def login(username, password):
     else:
         if check_password_hash(user.password, password):
             session["user_id"] = user.id
+            session["username"] = user.username
             return True
         else:
             return False
 
 def logout():
-    del session["user_id"]
+    try:
+        del session["username"]
+    except:
+        pass
+    try:
+        del session["user_id"]
+    except:
+        pass
 
 def register(username, password):
     hash_value = generate_password_hash(password)

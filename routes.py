@@ -12,24 +12,29 @@ def index():
 
 @app.route("/kirjautunut")
 def kirjautnut():
-    query = text('SELECT nimi, hankintapaikka FROM Merkit;')
+    query = text('SELECT id, nimi FROM Merkit;')
     result = db.session.execute(query)
     results = result.fetchall()
     return render_template("kirjautunut.html", results=results)
 
-@app.route("/new")
-def new():
-    return render_template("new.html")
+@app.route("/merkki/<int:id>")
+def merkki(id):
+    query = text('SELECT nimi FROM Merkit WHERE id = :id;')
+    result = db.session.execute(query, {"id": id})
+    nimi = result.fetchone()[0]
+    return render_template("merkki.html", nimi=nimi)
 
-@app.route("/send", methods=["POST"])
+
+@app.route("/new/merkki")
+def new():
+    return render_template("new_merkki.html")
+
+@app.route("/send/new/merkki", methods=["POST"])
 def send():
     nimi = request.form.get("nimi")
-    hankintapaikka = request.form.get("hankintapaikka")
-
-    sql = text("INSERT INTO Merkit(nimi, hankintapaikka) VALUES (:nimi, :hankintapaikka)")  
-    db.session.execute(sql, {"nimi": nimi, "hankintapaikka": hankintapaikka})
+    sql = text("INSERT INTO Merkit(nimi) VALUES (:nimi)")  
+    db.session.execute(sql, {"nimi": nimi})
     db.session.commit()
-
     return redirect("/kirjautunut")
 
 @app.route("/register", methods=["GET"])
@@ -47,10 +52,10 @@ def register():
         if password1 != password2:
             return render_template("error.html", message="Salasanat eroavat")
         if users.register(username, password1):
-            return redirect("/kirjautunut")
+            return redirect("/")
         else:
             return render_template("error.html", message="Rekisteröinti ei onnistunut")
-    
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "GET":
@@ -59,10 +64,9 @@ def login():
         username = request.form["username"]
         password = request.form["password"]
         if users.login(username, password):
-            return redirect("/kirjautunut")
+            return redirect("/")
         else:
             return render_template("error.html", message="Väärä tunnus tai salasana")
-        
 
 @app.route("/logout")
 def logout():

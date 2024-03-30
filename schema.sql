@@ -1,7 +1,6 @@
 CREATE TABLE Merkit (
     id SERIAL PRIMARY KEY, 
     nimi TEXT, 
-    hankintapaikka TEXT
 );
 
 CREATE TABLE users (
