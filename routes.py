@@ -13,10 +13,27 @@ import base64
 from PIL import Image
 from io import BytesIO
 
+# for random texts in index.html
+import random
+
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    random_texts = ["Haalarimerkit on niin kuin Pokemonit eiks jeh?", \
+                    "Haalarimerkkejä ei voi olla liikaa.", \
+                    "Haalarimerkit on kuin tatuoinnit, mutta ei niin kivuliaita.", \
+                    "Haalarimerkit on kuin karkkia, ei voi olla liikaa.", \
+                    "Haalarimerkkien kokoelma: Jokainen merkki on kuin muisto opiskelijaelämän matkalta", \
+                    "Haalarimerkit on kuin kunniamerkkejä, mutta parempia.", \
+                    "Haalarimerkit: Elämän merkkejä, joita kannamme ylpeinä opiskelijoina", \
+                    "Haalarimerkit: Jokainen merkki kertoo tarinan", \
+                    "Haalarimerkit: Jokainen merkki on kuin palanen elämää", \
+                    "Haalarimerkit: Jokainen merkki on kuin palanen historiaa", \
+                    "Haalarimerkit: Jokainen merkki on kuin palanen sinua", \
+                    "Haalarimerkit: Opiskelijoiden tapa ilmaista itseään, yhtä värikäs kuin elämä itse" ,\
+    ]
+    random_text = random.choice(random_texts)
+    return render_template("index.html" , random_text = random_text)
 
 @app.route("/kirjautunut")
 def kirjautnut():
