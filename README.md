@@ -6,6 +6,10 @@
 - Users can make their patch collection public, other users can peek at other's collections.
 - Users can remove their patch from the collection
 
+# Using app on the web
+**Note!** Please allow up to 10 seconds for the fly.io instance to wake up from sleep!  
+https://haalarimerkkidex.fly.dev/
+
 # Running locally
 Prerequisites:
 - python3 installed
