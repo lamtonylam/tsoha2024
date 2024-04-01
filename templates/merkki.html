@@ -7,6 +7,13 @@
 
 <p>Merkin nimi: {{ nimi }}</p>
 
+<!-- display image if photo is not None -->
+{% if photo %}
+    <p>Kuva haalarimerkistä:</p>
+    <img src="data:image/jpeg;base64,{{ photo }}" alt="Patch Image">
+{% endif %}
+
+<br>
 
 <form action="/send/new/to_collection" method="POST">
     <input type="hidden" name="id" value="{{ id }}">

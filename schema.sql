@@ -7,6 +7,12 @@ CREATE TABLE Patches (
     name TEXT
 );
 
+CREATE TABLE Images (
+    id SERIAL PRIMARY KEY,
+    patch_id INTEGER REFERENCES Patches(id),
+    data BYTEA
+);
+
 CREATE TABLE Users (
     id SERIAL PRIMARY KEY,
     username TEXT UNIQUE,

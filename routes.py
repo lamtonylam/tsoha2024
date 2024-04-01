@@ -4,6 +4,14 @@ from flask import session
 import users
 from sqlalchemy.sql import text
 from db import db
+from flask import make_response
+
+# import base64 for image encoding
+import base64
+
+# pillow image compression
+from PIL import Image
+from io import BytesIO
 
 
 @app.route("/")
@@ -25,10 +33,26 @@ def kirjautnut():
 
 @app.route("/merkki/<int:id>")
 def merkki(id):
-    query = text('SELECT name FROM Patches WHERE id = :id;')
-    result = db.session.execute(query, {"id": id})
-    nimi = result.fetchone()[0]
-    return render_template("merkki.html", nimi=nimi, id=id)
+    # Fetch patch name
+    query_patch = text('SELECT name FROM Patches WHERE id = :id;')
+    result_patch = db.session.execute(query_patch, {"id": id})
+    patch_name = result_patch.fetchone()[0] if result_patch else None
+
+    # Fetch image data
+    query_image = text("SELECT data FROM images WHERE patch_id=:patch_id")
+    result_image = db.session.execute(query_image, {"patch_id": id})
+    try:
+        data = result_image.fetchone()[0] if result_image else None
+    except:
+        data = None
+    
+    # If image data is found, encode it to base64 and pass it to the template
+    if data is not None:
+        response = base64.b64encode(data).decode("utf-8")
+        return render_template("merkki.html", nimi=patch_name, id=id, photo=response)
+    else:
+        return render_template("merkki.html", nimi=patch_name, id=id)
+
 
 # adding a patch from general collection to user's own collection
 @app.route("/send/new/to_collection", methods=["POST"])
@@ -45,12 +69,42 @@ def to_collection():
 def new():
     return render_template("new_merkki.html")
 
+# adding patch to general collection for everyone to see
 @app.route("/send/new/merkki", methods=["POST"])
 def send():
+    # sending the patch to the general collection
     name = request.form.get("nimi")
     sql = text("INSERT INTO Patches(name) VALUES (:name)")  
     db.session.execute(sql, {"name": name})
     db.session.commit()
+
+    # Get the id of the created patch
+    query = text("SELECT id FROM Patches WHERE name = :name")
+    result = db.session.execute(query, {"name": name})
+    patch_id = result.fetchone()[0]
+
+    file = request.files["file"]
+    name = file.filename
+    if not name.lower().endswith((".jpg", ".jpeg")):
+        return "Invalid filename"
+    
+    #luetaan kuvan data
+    image_data = file.read()
+    image = Image.open(BytesIO(image_data))
+    
+    # 200 x 200
+    image.thumbnail((200, 200))
+    output = BytesIO()
+    # compress the image 60% quality
+    image.save(output, format='JPEG', quality=60)
+    data = output.getvalue()
+
+    # Insert the compressed and resized image into the database
+    sql = text("INSERT INTO Images(patch_id, data) VALUES (:patch_id, :data)")
+    db.session.execute(sql, {"patch_id": patch_id, "data": data })
+    db.session.commit()
+    print("kuva tallennettu onnistuneesti")
+
     return redirect("/kirjautunut")
 
 
