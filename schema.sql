@@ -1,6 +1,8 @@
-DROP TABLE IF EXISTS UsersToPatches;
-DROP TABLE IF EXISTS Users;
 DROP TABLE IF EXISTS Patches;
+DROP TABLE IF EXISTS Images;
+DROP TABLE IF EXISTS Users;
+DROP TABLE IF EXISTS UsersToPatches;
+
 
 CREATE TABLE Patches (
     id SERIAL PRIMARY KEY, 
@@ -22,6 +24,6 @@ CREATE TABLE Users (
 CREATE TABLE UsersToPatches (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES Users(id),
-    merkki_id INTEGER REFERENCES Patches(id),
+    patch_id INTEGER REFERENCES Patches(id),
     sent_at TIMESTAMP 
 );

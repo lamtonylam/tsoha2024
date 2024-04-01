@@ -25,9 +25,9 @@ def kirjautnut():
     results = result.fetchall()
 
     user_id = users.user_id()
-    query = text("SELECT Patches.name, UsersToPatches.sent_at, UsersToPatches.merkki_id \
+    query = text("SELECT Patches.name, UsersToPatches.sent_at, UsersToPatches.patch_id \
                 FROM Patches, UsersToPatches \
-                WHERE Patches.id = UsersToPatches.merkki_id AND UsersToPatches.user_id = :user_id;")
+                WHERE Patches.id = UsersToPatches.patch_id AND UsersToPatches.user_id = :user_id;")
     own_patches_result = db.session.execute(query, {"user_id": user_id})
     return render_template("kirjautunut.html", results=results, own_patches_result=own_patches_result)
 
@@ -57,10 +57,10 @@ def merkki(id):
 # adding a patch from general collection to user's own collection
 @app.route("/send/new/to_collection", methods=["POST"])
 def to_collection():
-    merkki_id = request.form["id"]
+    patch_id = request.form["id"]
     user_id = users.user_id()
-    sql = text("INSERT INTO UsersToPatches (merkki_id, user_id, sent_at) VALUES (:merkki_id, :user_id, NOW())")
-    db.session.execute(sql, {"merkki_id": merkki_id, "user_id": user_id})
+    sql = text("INSERT INTO UsersToPatches (patch_id, user_id, sent_at) VALUES (:patch_id, :user_id, NOW())")
+    db.session.execute(sql, {"patch_id": patch_id, "user_id": user_id})
     db.session.commit()
     return redirect("/kirjautunut")
 
