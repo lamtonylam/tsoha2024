@@ -107,32 +107,36 @@ def send():
     db.session.execute(sql, {"name": name})
     db.session.commit()
 
-    # Get the id of the created patch
+    # Get the id of the created patch, for inserting image.
     query = text("SELECT id FROM Patches WHERE name = :name")
     result = db.session.execute(query, {"name": name})
     patch_id = result.fetchone()[0]
 
-    file = request.files["file"]
-    name = file.filename
-    if not name.lower().endswith((".jpg", ".jpeg")):
-        return "Invalid filename"
-    
-    #luetaan kuvan data
-    image_data = file.read()
-    image = Image.open(BytesIO(image_data))
-    
-    # 200 x 200
-    image.thumbnail((200, 200))
-    output = BytesIO()
-    # compress the image 60% quality
-    image.save(output, format='JPEG', quality=60)
-    data = output.getvalue()
+    # get file from html form
+    file = request.files.get("file")
 
-    # Insert the compressed and resized image into the database
-    sql = text("INSERT INTO Images(patch_id, data) VALUES (:patch_id, :data)")
-    db.session.execute(sql, {"patch_id": patch_id, "data": data })
-    db.session.commit()
-    print("kuva tallennettu onnistuneesti")
+    # if file is not empty, then execute the sqls to insert the image.
+    if file:
+        name = file.filename
+        if not name.lower().endswith((".jpg", ".jpeg")):
+            return "Invalid filename"
+        
+        #luetaan kuvan data
+        image_data = file.read()
+        image = Image.open(BytesIO(image_data))
+        
+        # 200 x 200
+        image.thumbnail((200, 200))
+        output = BytesIO()
+        # compress the image 60% quality
+        image.save(output, format='JPEG', quality=60)
+        data = output.getvalue()
+
+        # Insert the compressed and resized image into the database
+        sql = text("INSERT INTO Images(patch_id, data) VALUES (:patch_id, :data)")
+        db.session.execute(sql, {"patch_id": patch_id, "data": data })
+        db.session.commit()
+        print("kuva lisätty")
 
     return redirect("/kirjautunut")
 
