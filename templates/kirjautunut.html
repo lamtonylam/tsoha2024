@@ -24,7 +24,7 @@
     {% for result in own_patches_result %}
         <p>Merkin nimi: <b> {{ result.name }}</b></p> 
         <p>Lisätty omaan kokoelmaan: <b>{{result.sent_at.strftime("%Y-%m-%d %H:%M:%S")}}</b></p>
-        <a href="/merkki/{{ result.merkki_id }}">Tietoja</a>
+        <a href="/merkki/{{ result.patch_id  }}">Tietoja</a>
 <hr>
 {% endfor %}
 
