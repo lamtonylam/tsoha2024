@@ -20,19 +20,26 @@ import random
 @app.route("/")
 def index():
     random_texts = ["Haalarimerkit on niin kuin Pokemonit eiks jeh?", \
-                    "Haalarimerkkejä ei voi olla liikaa.", \
                     "Haalarimerkit on kuin tatuoinnit, mutta ei niin kivuliaita.", \
-                    "Haalarimerkit on kuin karkkia, ei voi olla liikaa.", \
-                    "Haalarimerkkien kokoelma: Jokainen merkki on kuin muisto opiskelijaelämän matkalta", \
-                    "Haalarimerkit on kuin kunniamerkkejä, mutta parempia.", \
-                    "Haalarimerkit: Elämän merkkejä, joita kannamme ylpeinä opiskelijoina", \
-                    "Haalarimerkit: Jokainen merkki kertoo tarinan", \
-                    "Haalarimerkit: Jokainen merkki on kuin palanen elämää", \
-                    "Haalarimerkit: Jokainen merkki on kuin palanen historiaa", \
-                    "Haalarimerkit: Jokainen merkki on kuin palanen sinua", \
-                    "Haalarimerkit: Opiskelijoiden tapa ilmaista itseään, yhtä värikäs kuin elämä itse" ,\
+                    "Haalarimerkit muistuttavat meitä tunteista, olipa ne rakkautta, iloa tai surua", \
+                    "Live laugh love, haalarimerkit", \
+                    "Carpe diem", \
+                    "#approt #apollojatkot #tunnen_kuinka_vauhti_kiihtyy", \
+                    "Oispa risse...", \
+                    "Bmur? Bmur!", \
+                    "Mis jatkot?", \
+                    
     ]
+    # get previously displayed text
+    previous_text = session.get("random_text")
+    # get a new random text
     random_text = random.choice(random_texts)
+    # if the new text is the same as the previous one, get a new one
+    while random_text == previous_text:
+        random_text = random.choice(random_texts)
+    # save the new text to session
+    session["random_text"] = random_text
+
     return render_template("index.html" , random_text = random_text)
 
 @app.route("/kirjautunut")
