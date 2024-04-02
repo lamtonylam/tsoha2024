@@ -4,16 +4,16 @@
 
 
 {% if session.username %}
-<p>Olet kirjautunut nimellä {{ session.username }}</p>
+<p>Olet kirjautunut nimellä <b>{{ session.username }}</b></p>
 
 
 
-<h4>Kaikki merkit</h4>
+<h4>Kaikki yhteisön haalarimerkit</h4>
 
 <hr>
     {% for result in results %}
         <p>Merkin nimi: <b> {{ result.name }}</b></p> 
-        <a href="/merkki/{{ result.id }}">Lisää merkki omaan kokoelmaasi</a>
+        <a href="/merkki/{{ result.id }}">Katso lisätietoja / Lisää merkki omaan kokoelmaasi</a>
 <hr>
 {% endfor %}
 
@@ -31,7 +31,6 @@
 
 
 
-<a href="/new/merkki">Lisää uusi</a>
 
 <br>
 <br>

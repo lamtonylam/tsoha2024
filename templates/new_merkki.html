@@ -5,13 +5,12 @@
 {% block content %}
 
 
-    <b>Tervetuloa</b> <i>sovellukseen</i>!
-
     {% if session.username %}
-    <p>Olet kirjautunut nimellä {{ session.username }}</p>
+    <p>Olet kirjautunut nimellä <b>{{ session.username }}</b></p>
 
     <form action="/send/new/merkki" method="POST" enctype="multipart/form-data">
         <br>
+        <p>Lisää uusi haalarimerkki:</p>
         <div class="form-group"></div>
         <input type="text" class="form-control" id="nimi" name="nimi" placeholder="Haalarimerkin nimi:" required>
         <br>
