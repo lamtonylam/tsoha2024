@@ -93,8 +93,16 @@ def new():
 # adding patch to general collection for everyone to see
 @app.route("/send/new/merkki", methods=["POST"])
 def send():
-    # sending the patch to the general collection
     name = request.form.get("nimi")
+    
+    # testing if name is already in the database
+    sql = text("SELECT name FROM Patches WHERE name = :name")
+    result = db.session.execute(sql, {"name": name})
+    if result.fetchone() is not None:
+        # return error message if name is already in the database
+        return render_template("error.html", message="Merkki on jo olemassa")
+    
+    # insert the patch to the database
     sql = text("INSERT INTO Patches(name) VALUES (:name)")  
     db.session.execute(sql, {"name": name})
     db.session.commit()
