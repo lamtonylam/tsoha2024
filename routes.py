@@ -37,6 +37,10 @@ def index():
 
 @app.route("/kirjautunut")
 def kirjautnut():
+    # if user is not logged in dont run sqls etc.
+    if users.get_username() == "":
+        return render_template("kirjautunut.html")
+    
     query = text('SELECT id, name FROM Patches;')
     result = db.session.execute(query)
     results = result.fetchall()
