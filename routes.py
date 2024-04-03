@@ -16,6 +16,9 @@ from io import BytesIO
 # for random texts in index.html
 import random_text_generator
 
+# module import for sending patches into general collection
+import sendpatch
+
 @app.route("/")
 def index():
     # get previously displayed text
@@ -88,47 +91,24 @@ def send():
     name = request.form.get("nimi")
     
     # testing if name is already in the database
-    sql = text("SELECT name FROM Patches WHERE name = :name")
-    result = db.session.execute(sql, {"name": name})
-    if result.fetchone() is not None:
-        # return error message if name is already in the database
+    # return True if name is already in the database
+    if sendpatch.patchname_exists(name) == True:
+        # return error message if name is already in the database and break out of function
         return render_template("new_merkki.html", error="Merkki on jo olemassa")
     
     # insert the patch to the database
-    sql = text("INSERT INTO Patches(name) VALUES (:name)")  
-    db.session.execute(sql, {"name": name})
-    db.session.commit()
+    sendpatch.insert_patch_into_generalcollection(name)
 
     # Get the id of the created patch, for inserting image.
-    query = text("SELECT id FROM Patches WHERE name = :name")
-    result = db.session.execute(query, {"name": name})
-    patch_id = result.fetchone()[0]
+    patch_id = sendpatch.get_patch_id(name)
+
 
     # get file from html form
     file = request.files.get("file")
 
     # if file is not empty, then execute the sqls to insert the image.
     if file:
-        name = file.filename
-        if not name.lower().endswith((".jpg", ".jpeg")):
-            return render_template("new_merkki.html", error="Vain .jpg ja .jpeg tiedostot sallittu")
-        
-        #luetaan kuvan data
-        image_data = file.read()
-        image = Image.open(BytesIO(image_data))
-        
-        # 200 x 200
-        image.thumbnail((200, 200))
-        output = BytesIO()
-        # compress the image 60% quality
-        image.save(output, format='JPEG', quality=60)
-        data = output.getvalue()
-
-        # Insert the compressed and resized image into the database
-        sql = text("INSERT INTO Images(patch_id, data) VALUES (:patch_id, :data)")
-        db.session.execute(sql, {"patch_id": patch_id, "data": data })
-        db.session.commit()
-        print("kuva lisätty")
+        sendpatch.insert_image(file, patch_id)
 
     # if all is okay return kirjautunut page
     return render_template("new_merkki.html", success="Merkki lisätty yhteiseen kokoelmaan onnistuneesti")
