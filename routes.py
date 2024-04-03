@@ -35,7 +35,7 @@ def kirjautnut():
     # if user is not logged in dont run sqls etc.
     if users.get_username() == "":
         return render_template("kirjautunut.html")
-    
+
     query = text('SELECT id, name FROM Patches;')
     result = db.session.execute(query)
     results = result.fetchall()
@@ -61,7 +61,7 @@ def merkki(id):
         data = result_image.fetchone()[0] if result_image else None
     except:
         data = None
-    
+
     # If image data is found, encode it to base64 and pass it to the template
     if data is not None:
         response = base64.b64encode(data).decode("utf-8")
@@ -89,13 +89,13 @@ def new():
 @app.route("/send/new/merkki", methods=["POST"])
 def send():
     name = request.form.get("nimi")
-    
+
     # testing if name is already in the database
     # return True if name is already in the database
     if sendpatch.patchname_exists(name) == True:
         # return error message if name is already in the database and break out of function
         return render_template("new_merkki.html", error="Merkki on jo olemassa")
-    
+
     # insert the patch to the database
     sendpatch.insert_patch_into_generalcollection(name)
 
