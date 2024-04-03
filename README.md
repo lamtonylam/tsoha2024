@@ -25,7 +25,8 @@ Navigate into the correct folder containing the repository
 
 Create a .env enviorement file with the following variables.    
 `DATABASE_URL=<local-postgres-address>`  
-`SECRET_KEY=<secret key>`
+`SECRET_KEY=<your-secret-key>`  
+`FLY_DEPLOYMENT=False`
 
 Enable virtual environment  
 `python3 -m venv venv`  
