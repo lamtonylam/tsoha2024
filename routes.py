@@ -92,7 +92,7 @@ def send():
     result = db.session.execute(sql, {"name": name})
     if result.fetchone() is not None:
         # return error message if name is already in the database
-        return render_template("error.html", message="Merkki on jo olemassa")
+        return render_template("new_merkki.html", error="Merkki on jo olemassa")
     
     # insert the patch to the database
     sql = text("INSERT INTO Patches(name) VALUES (:name)")  
@@ -111,7 +111,7 @@ def send():
     if file:
         name = file.filename
         if not name.lower().endswith((".jpg", ".jpeg")):
-            return "Invalid filename"
+            return render_template("new_merkki.html", error="Vain .jpg ja .jpeg tiedostot sallittu")
         
         #luetaan kuvan data
         image_data = file.read()
@@ -130,7 +130,8 @@ def send():
         db.session.commit()
         print("kuva lisätty")
 
-    return redirect("/kirjautunut")
+    # if all is okay return kirjautunut page
+    return render_template("new_merkki.html", success="Merkki lisätty yhteiseen kokoelmaan onnistuneesti")
 
 
 @app.route("/register", methods=["GET", "POST"])

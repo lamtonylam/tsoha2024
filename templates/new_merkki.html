@@ -1,10 +1,24 @@
-
 {% extends 'base.html' %}
 
 {% block title %}Uusi merkki{% endblock %}
 
 
 {% block content %}
+
+<!-- if error when submitting new patch to general collection -->
+{% if error %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+{% endif %}
+
+
+<!-- success message for successfully adding patch to general collection -->
+{% if success %}
+    <div class="alert alert-success" role="alert">
+        {{ success }}
+    </div>
+{% endif %}
 
 
     {% if session.username %}
