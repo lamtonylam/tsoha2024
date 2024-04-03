@@ -14,7 +14,7 @@
 </div>
 
 
-<!-- jos käyttäjä ei ole kirjautunut sisään, näytä kirjautumisnappi -->
+<!-- if user has not logged on, display buttons to log in or register -->
 {% if not session.username %}
     <div class="btn-group">
         <a href="/login" class="btn btn-primary btn-important">Sign In</a>
@@ -23,7 +23,15 @@
     </div>
 {% endif %}
 
-<!-- jos käyttäjä on kirjautunut sisään  -->
+
+<!-- display success message upon successful login/registration -->
+{% if message %}
+    <div class="alert alert-success text-center" role="alert">
+        {{ message }}
+    </div>
+{% endif %}
+
+<!-- if user has logged on, display this block  -->
 {% if session.username %}
     <p>Olet kirjautunut nimellä <b>{{ session.username }}</b></p>
     <p> Unique ID:si on {{session.user_id}}</p>

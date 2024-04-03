@@ -4,6 +4,14 @@
 
 {% block content %}
 
+
+<!-- display error message if unsucesful login -->
+{% if message %}
+<div class="alert alert-danger text-center" role="alert">
+    {{ message }}
+</div>
+{% endif %}
+
 <div class="container text-center">
     <form action="/login" method="post" class="mx-auto">
         <div class="mb-3">

@@ -140,17 +140,17 @@ def register():
     if request.method == "POST":
         username = request.form["username"]
         if len(username) < 1 or len(username) > 20:
-            return render_template("error.html", message="Käyttäjätunnuksen tulee olla 1-20 merkkiä pitkä")
+            return render_template("register.html", message="Käyttäjätunnuksen tulee olla 1-20 merkkiä pitkä")
         password1 = request.form["password1"]
         password2 = request.form["password2"]
         if password1 != password2:
-            return render_template("error.html", message="Salasanat eroavat")
+            return render_template("register.html", message="Salasanat eroavat")
         if len(password1) < 8 or len(password1) > 20:
-            return render_template("error.html", message="Salasanan tulee olla 8-20 merkkiä pitkä")
+            return render_template("register.html", message="Salasanan tulee olla 8-20 merkkiä pitkä")
         if users.register(username, password1):
-            return redirect("/")
+            return render_template("index.html", message="Rekisteröinti onnistui")
         else:
-            return render_template("error.html", message="Rekisteröinti ei onnistunut")
+            return render_template("register.html", message="Rekisteröinti ei onnistunut")
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -160,9 +160,9 @@ def login():
         username = request.form["username"]
         password = request.form["password"]
         if users.login(username, password):
-            return redirect("/")
+            return render_template("index.html", message="Kirjautuminen onnistui")
         else:
-            return render_template("error.html", message="Väärä tunnus tai salasana")
+            return render_template("login.html", message="Väärä tunnus tai salasana")
 
 @app.route("/logout")
 def logout():
