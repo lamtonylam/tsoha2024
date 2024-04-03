@@ -161,7 +161,7 @@ def login():
         username = request.form["username"]
         password = request.form["password"]
         if users.login(username, password):
-            return render_template("index.html", message="Kirjautuminen onnistui")
+            return redirect("/")
         else:
             return render_template("login.html", message="Väärä tunnus tai salasana")
 
