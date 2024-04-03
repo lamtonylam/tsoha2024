@@ -23,6 +23,10 @@ Clone the repository
 Navigate into the correct folder containing the repository  
 `cd haalarimerkkidex`
 
+Create a .env enviorement file with the following variables.    
+`DATABASE_URL=<local-postgres-address>`  
+`SECRET_KEY=<secret key>`
+
 Enable virtual environment  
 `python3 -m venv venv`  
 `source venv/bin/activate`
