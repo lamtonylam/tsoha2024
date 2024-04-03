@@ -108,6 +108,12 @@ def send():
 
     # if file is not empty, then execute the sqls to insert the image.
     if file:
+        file_name = file.filename
+        # check if file is jpg or jpeg
+        if not file_name.lower().endswith((".jpg", ".jpeg")):
+            return render_template("new_merkki.html", error="Vain .jpg ja .jpeg tiedostot sallittu")
+
+        # insert image to database
         sendpatch.insert_image(file, patch_id)
 
     # if all is okay return kirjautunut page

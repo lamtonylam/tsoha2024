@@ -26,21 +26,16 @@ def get_patch_id(name):
 
 # Function to insert an image into the database
 def insert_image(file, patch_id):
-    name = file.filename
-    if not name.lower().endswith((".jpg", ".jpeg")):
-        return render_template("new_merkki.html", error="Vain .jpg ja .jpeg tiedostot sallittu")
-    
     # Read image data
     image_data = file.read()
     image = Image.open(BytesIO(image_data))
-    
+
     # Resize to 200 x 200
     image.thumbnail((200, 200))
     output = BytesIO()
     # Compress the image to 60% quality
     image.save(output, format='JPEG', quality=60)
     data = output.getvalue()
-
     # Insert the compressed and resized image into the database
     sql = text("INSERT INTO Images(patch_id, data) VALUES (:patch_id, :data)")
     db.session.execute(sql, {"patch_id": patch_id, "data": data })
