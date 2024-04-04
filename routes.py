@@ -93,6 +93,16 @@ def new():
 @app.route("/send/new/merkki", methods=["POST"])
 def send():
     name = request.form.get("nimi")
+    # get file from html form
+    file = request.files.get("file")
+
+    # check if file is empty
+    if file:
+        file_name = file.filename
+        # check if file is jpg or jpeg
+        if not file_name.lower().endswith((".jpg", ".jpeg")):
+            return render_template("new_merkki.html", error="Vain .jpg ja .jpeg tiedostot sallittu")
+
     username = users.get_username()
 
     # testing if name is already in the database
@@ -107,17 +117,7 @@ def send():
     # Get the id of the created patch, for inserting image.
     patch_id = sendpatch.get_patch_id(name)
 
-
-    # get file from html form
-    file = request.files.get("file")
-
-    # if file is not empty, then execute the sqls to insert the image.
     if file:
-        file_name = file.filename
-        # check if file is jpg or jpeg
-        if not file_name.lower().endswith((".jpg", ".jpeg")):
-            return render_template("new_merkki.html", error="Vain .jpg ja .jpeg tiedostot sallittu")
-
         # insert image to database
         sendpatch.insert_image(file, patch_id)
 
