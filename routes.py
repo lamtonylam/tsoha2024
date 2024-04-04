@@ -75,6 +75,8 @@ def merkki(id):
 # adding a patch from general collection to user's own collection
 @app.route("/send/new/to_collection", methods=["POST"])
 def to_collection():
+    sql_set_timezone = text("SET TIME ZONE 'Europe/Helsinki';")
+    db.session.execute(sql_set_timezone)
     patch_id = request.form["id"]
     user_id = users.user_id()
     sql = text("INSERT INTO UsersToPatches (patch_id, user_id, sent_at) VALUES (:patch_id, :user_id, NOW())")
