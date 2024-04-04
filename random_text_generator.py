@@ -1,3 +1,7 @@
+"""
+This module contains a function to generate random text from a predefined list.
+The function ensures that the same text is not repeated consecutively.
+"""
 import random
 
 def generate_random_text(previous_text):

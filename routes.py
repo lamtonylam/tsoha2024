@@ -68,8 +68,8 @@ def merkki(id):
     if data is not None:
         response = base64.b64encode(data).decode("utf-8")
         return render_template("merkki.html", nimi=patch_name, created_by_user = created_by_user, id=id, photo=response)
-    else:
-        return render_template("merkki.html", nimi=patch_name, created_by_user = created_by_user, id=id)
+
+    return render_template("merkki.html", nimi=patch_name, created_by_user = created_by_user, id=id)
 
 
 # adding a patch from general collection to user's own collection
@@ -95,7 +95,7 @@ def send():
 
     # testing if name is already in the database
     # return True if name is already in the database
-    if sendpatch.patchname_exists(name) == True:
+    if sendpatch.patchname_exists(name) is True:
         # return error message if name is already in the database and break out of function
         return render_template("new_merkki.html", error="Merkki on jo olemassa")
 
