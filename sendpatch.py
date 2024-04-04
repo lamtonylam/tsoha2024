@@ -13,9 +13,9 @@ def patchname_exists(name):
     return result.fetchone() is not None
 
 # Function to insert a patch into the general collection
-def insert_patch_into_generalcollection(name):
-    sql = text("INSERT INTO Patches(name) VALUES (:name)")  
-    db.session.execute(sql, {"name": name})
+def insert_patch_into_generalcollection(name, username):
+    sql = text("INSERT INTO Patches(name, created_by_user) VALUES (:name, :username)")  
+    db.session.execute(sql, {"name": name, "username": username})
     db.session.commit()
 
 # Function to get the id of a patch by its name

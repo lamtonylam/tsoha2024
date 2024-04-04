@@ -49,10 +49,12 @@ def kirjautnut():
 
 @app.route("/merkki/<int:id>")
 def merkki(id):
-    # Fetch patch name
-    query_patch = text('SELECT name FROM Patches WHERE id = :id;')
+    # Fetch patch name and user id of the patch
+    query_patch = text('SELECT name, created_by_user FROM Patches WHERE id = :id;')
     result_patch = db.session.execute(query_patch, {"id": id})
-    patch_name = result_patch.fetchone()[0] if result_patch else None
+    row = result_patch.fetchone()
+    patch_name = row[0]
+    created_by_user = row[1]
 
     # Fetch image data
     query_image = text("SELECT data FROM images WHERE patch_id=:patch_id")
@@ -65,9 +67,9 @@ def merkki(id):
     # If image data is found, encode it to base64 and pass it to the template
     if data is not None:
         response = base64.b64encode(data).decode("utf-8")
-        return render_template("merkki.html", nimi=patch_name, id=id, photo=response)
+        return render_template("merkki.html", nimi=patch_name, created_by_user = created_by_user, id=id, photo=response)
     else:
-        return render_template("merkki.html", nimi=patch_name, id=id)
+        return render_template("merkki.html", nimi=patch_name, created_by_user = created_by_user, id=id)
 
 
 # adding a patch from general collection to user's own collection
@@ -89,6 +91,7 @@ def new():
 @app.route("/send/new/merkki", methods=["POST"])
 def send():
     name = request.form.get("nimi")
+    username = users.get_username()
 
     # testing if name is already in the database
     # return True if name is already in the database
@@ -97,7 +100,7 @@ def send():
         return render_template("new_merkki.html", error="Merkki on jo olemassa")
 
     # insert the patch to the database
-    sendpatch.insert_patch_into_generalcollection(name)
+    sendpatch.insert_patch_into_generalcollection(name, username)
 
     # Get the id of the created patch, for inserting image.
     patch_id = sendpatch.get_patch_id(name)
