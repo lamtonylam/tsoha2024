@@ -19,6 +19,7 @@ import random_text_generator
 # module import for sending patches into general collection
 import sendpatch
 
+
 @app.route("/")
 def index():
     # get previously displayed text
@@ -28,7 +29,8 @@ def index():
     # save the new text to session
     session["random_text"] = random_text
 
-    return render_template("index.html" , random_text = random_text)
+    return render_template("index.html", random_text=random_text)
+
 
 @app.route("/kirjautunut")
 def kirjautnut():
@@ -36,21 +38,26 @@ def kirjautnut():
     if users.get_username() == "":
         return render_template("kirjautunut.html")
 
-    query = text('SELECT id, name FROM Patches;')
+    query = text("SELECT id, name FROM Patches;")
     result = db.session.execute(query)
     results = result.fetchall()
 
     user_id = users.user_id()
-    query = text("SELECT Patches.name, UsersToPatches.sent_at, UsersToPatches.patch_id \
+    query = text(
+        "SELECT Patches.name, UsersToPatches.sent_at, UsersToPatches.patch_id \
                 FROM Patches, UsersToPatches \
-                WHERE Patches.id = UsersToPatches.patch_id AND UsersToPatches.user_id = :user_id;")
+                WHERE Patches.id = UsersToPatches.patch_id AND UsersToPatches.user_id = :user_id;"
+    )
     own_patches_result = db.session.execute(query, {"user_id": user_id})
-    return render_template("kirjautunut.html", results=results, own_patches_result=own_patches_result)
+    return render_template(
+        "kirjautunut.html", results=results, own_patches_result=own_patches_result
+    )
+
 
 @app.route("/merkki/<int:id>")
 def merkki(id):
     # Fetch patch name and user id of the patch
-    query_patch = text('SELECT name, created_by_user FROM Patches WHERE id = :id;')
+    query_patch = text("SELECT name, created_by_user FROM Patches WHERE id = :id;")
     result_patch = db.session.execute(query_patch, {"id": id})
     row = result_patch.fetchone()
     patch_name = row[0]
@@ -67,9 +74,17 @@ def merkki(id):
     # If image data is found, encode it to base64 and pass it to the template
     if data is not None:
         response = base64.b64encode(data).decode("utf-8")
-        return render_template("merkki.html", nimi=patch_name, created_by_user = created_by_user, id=id, photo=response)
+        return render_template(
+            "merkki.html",
+            nimi=patch_name,
+            created_by_user=created_by_user,
+            id=id,
+            photo=response,
+        )
 
-    return render_template("merkki.html", nimi=patch_name, created_by_user = created_by_user, id=id)
+    return render_template(
+        "merkki.html", nimi=patch_name, created_by_user=created_by_user, id=id
+    )
 
 
 # adding a patch from general collection to user's own collection
@@ -79,15 +94,19 @@ def to_collection():
     db.session.execute(sql_set_timezone)
     patch_id = request.form["id"]
     user_id = users.user_id()
-    sql = text("INSERT INTO UsersToPatches (patch_id, user_id, sent_at) VALUES (:patch_id, :user_id, NOW())")
+    sql = text(
+        "INSERT INTO UsersToPatches (patch_id, user_id, sent_at) VALUES (:patch_id, :user_id, NOW())"
+    )
     db.session.execute(sql, {"patch_id": patch_id, "user_id": user_id})
     db.session.commit()
     return redirect("/kirjautunut")
+
 
 # adding patch to general collection for everyone to see
 @app.route("/new/merkki")
 def new():
     return render_template("new_merkki.html")
+
 
 # adding patch to general collection for everyone to see
 @app.route("/send/new/merkki", methods=["POST"])
@@ -101,7 +120,9 @@ def send():
         file_name = file.filename
         # check if file is jpg or jpeg
         if not file_name.lower().endswith((".jpg", ".jpeg")):
-            return render_template("new_merkki.html", error="Vain .jpg ja .jpeg tiedostot sallittu")
+            return render_template(
+                "new_merkki.html", error="Vain .jpg ja .jpeg tiedostot sallittu"
+            )
 
     username = users.get_username()
 
@@ -122,7 +143,9 @@ def send():
         sendpatch.insert_image(file, patch_id)
 
     # if all is okay return kirjautunut page
-    return render_template("new_merkki.html", success="Merkki lisätty yhteiseen kokoelmaan onnistuneesti")
+    return render_template(
+        "new_merkki.html", success="Merkki lisätty yhteiseen kokoelmaan onnistuneesti"
+    )
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -132,17 +155,25 @@ def register():
     if request.method == "POST":
         username = request.form["username"]
         if len(username) < 1 or len(username) > 20:
-            return render_template("register.html", message="Käyttäjätunnuksen tulee olla 1-20 merkkiä pitkä")
+            return render_template(
+                "register.html",
+                message="Käyttäjätunnuksen tulee olla 1-20 merkkiä pitkä",
+            )
         password1 = request.form["password1"]
         password2 = request.form["password2"]
         if password1 != password2:
             return render_template("register.html", message="Salasanat eroavat")
         if len(password1) < 8 or len(password1) > 20:
-            return render_template("register.html", message="Salasanan tulee olla 8-20 merkkiä pitkä")
+            return render_template(
+                "register.html", message="Salasanan tulee olla 8-20 merkkiä pitkä"
+            )
         if users.register(username, password1):
             return render_template("index.html", message="Rekisteröinti onnistui")
         else:
-            return render_template("register.html", message="Rekisteröinti ei onnistunut")
+            return render_template(
+                "register.html", message="Rekisteröinti ei onnistunut"
+            )
+
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -155,6 +186,7 @@ def login():
             return redirect("/")
         else:
             return render_template("login.html", message="Väärä tunnus tai salasana")
+
 
 @app.route("/logout")
 def logout():

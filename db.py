@@ -2,6 +2,7 @@
 This module sets up the database connection for the application using Flask-SQLAlchemy.
 It reads the database URL from environment variables and configures the SQLAlchemy instance.
 """
+
 from os import getenv
 from flask_sqlalchemy import SQLAlchemy
 from app import app
