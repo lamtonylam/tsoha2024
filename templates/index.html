@@ -1,14 +1,13 @@
-<div class="text-center">
-    {% extends 'base.html' %}
-    {% block title %}Haalarimerkkidex{% endblock %}
+{% extends 'base.html' %}
+{% block title %}Haalarimerkkidex{% endblock %}
 
-    {% block content %}
+{% block content %}
 
+<br>
+    <h1>Tervetuloa käyttämään haalarimerkkiDEXiä</h1>
     <br>
-        <h1>Tervetuloa käyttämään haalarimerkkiDEXiä</h1>
-        <br>
-        <h5><i>{{random_text}}</i></h5>
-        <br>
+    <h5><i>{{random_text}}</i></h5>
+    <br>
 
 
 <!-- if user has not logged on, display buttons to log in or register -->
@@ -36,7 +35,6 @@
 
     <a href="/logout" class="btn btn-primary">Kirjaudu ulos</a>
 {% endif %}
-
 
 
 
