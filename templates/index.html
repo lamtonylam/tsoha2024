@@ -5,21 +5,18 @@
     {% block content %}
 
     <br>
-    <div style="text-align: center;">
         <h1>Tervetuloa käyttämään haalarimerkkiDEXiä</h1>
         <br>
         <h5><i>{{random_text}}</i></h5>
         <br>
-    </div>
-</div>
 
 
 <!-- if user has not logged on, display buttons to log in or register -->
 {% if not session.username %}
     <div class="btn-group">
-        <a href="/login" class="btn btn-primary btn-important">Sign In</a>
+        <a href="/login" class="btn btn-primary btn-important">Kirjaudu sisään</a>
         <span>&nbsp;</span> <!-- Add a space between the buttons -->
-        <a href="/register" class="btn btn-primary">Register</a>
+        <a href="/register" class="btn btn-primary">Rekisteröidy</a>
     </div>
 {% endif %}
 
