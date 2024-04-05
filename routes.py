@@ -207,3 +207,24 @@ def login():
 def logout():
     users.logout()
     return redirect("/")
+
+
+@app.route("/profile")
+def profile():
+    username = users.get_username()
+
+    user_id = users.user_id()
+    query = text(
+        "SELECT Patches.name, UsersToPatches.sent_at, UsersToPatches.patch_id \
+                FROM Patches, UsersToPatches \
+                WHERE Patches.id = UsersToPatches.patch_id AND UsersToPatches.user_id = :user_id;"
+    )
+    result = db.session.execute(query, {"user_id": user_id})
+    own_patches_result = result.fetchall()
+
+    return render_template(
+        "profile.html",
+        username=username,
+        own_patches_result=own_patches_result,
+        patch_amount=len(own_patches_result),
+    )

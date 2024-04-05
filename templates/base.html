@@ -43,11 +43,14 @@
                         >Katso haalarimerkkejä</a
                     >
                     <a class="nav-item nav-link active" href="/new/merkki"
-                        >Lisää haalarimerkki</a
+                        >Lisää haalarimerkki yhteisöön</a
                     >
                 </div>
                 {% if session.username %}
                 <div class="navbar-nav ml-auto">
+                    <a class="nav-item nav-link active" href="/profile"
+                        >Profiili</a
+                    > &nbsp; &nbsp; &nbsp;
                     <a
                         class="btn btn-outline-primary"
                         href="/logout"
@@ -55,8 +58,7 @@
                         >Kirjaudu ulos</a
                     >
                 </div>
-                {% endif %} 
-                {% if not session.username %}
+                {% endif %} {% if not session.username %}
                 <div class="navbar-nav ml-auto">
                     <a
                         class="btn btn-outline-primary"
