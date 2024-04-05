@@ -5,16 +5,23 @@
 
 
 {% if session.username %}
-<p>Olet kirjautunut nimellä <b>{{ session.username }}</b></p>
+<p>Olet kirjautunut nimellä: <b>{{ session.username }}</b></p>
 
 
 
 <h4>Kaikki yhteisön haalarimerkit</h4>
 
 <hr>
-    {% for result in results %}
-        <p>Merkin nimi: <b> {{ result.name }}</b></p> 
-        <a href="/merkki/{{ result.id }}">Katso lisätietoja / Lisää merkki omaan kokoelmaasi</a>
+{% for result, image in results %}
+<p>Merkin nimi: <b>{{ result.name }}</b></p>
+{% if image %}
+<img src="data:image/jpeg;base64,{{ image }}" alt="Image for patch {{ result[1] }}"
+    style="max-width: 100px; height: auto;">
+<br>
+<br>
+{% endif %}
+<a href="/merkki/{{ result.id }}">Katso lisätietoja / Lisää merkki omaan kokoelmaasi</a>
+
 <hr>
 {% endfor %}
 
@@ -22,10 +29,10 @@
 <h4>Omat merkit:</h4>
 
 <hr>
-    {% for result in own_patches_result %}
-        <p>Merkin nimi: <b> {{ result.name }}</b></p> 
-        <p>Lisätty omaan kokoelmaan: <b>{{result.sent_at.strftime("%Y-%m-%d %H:%M:%S")}}</b></p>
-        <a href="/merkki/{{ result.patch_id  }}">Tietoja</a>
+{% for result in own_patches_result %}
+<p>Merkin nimi: <b> {{ result.name }}</b></p>
+<p>Lisätty omaan kokoelmaan: <b>{{result.sent_at.strftime("%Y-%m-%d %H:%M:%S")}}</b></p>
+<a href="/merkki/{{ result.patch_id  }}">Tietoja</a>
 <hr>
 {% endfor %}
 

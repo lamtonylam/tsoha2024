@@ -42,6 +42,19 @@ def kirjautnut():
     result = db.session.execute(query)
     results = result.fetchall()
 
+    # Fetch image data for each patch, encode it to base64 and pass it to the template
+    patch_images = []
+    for patch in results:
+        patch_id = patch[0]
+        sql = text("SELECT data FROM Images WHERE patch_id = :patch_id;")
+        result = db.session.execute(sql, {"patch_id": patch_id})
+        image = result.fetchone()
+        if image:
+            image = base64.b64encode(image[0]).decode("utf-8")
+            patch_images.append(image)
+        else:
+            patch_images.append(None)
+
     user_id = users.user_id()
     query = text(
         "SELECT Patches.name, UsersToPatches.sent_at, UsersToPatches.patch_id \
@@ -50,7 +63,9 @@ def kirjautnut():
     )
     own_patches_result = db.session.execute(query, {"user_id": user_id})
     return render_template(
-        "kirjautunut.html", results=results, own_patches_result=own_patches_result
+        "kirjautunut.html",
+        results=zip(results, patch_images),
+        own_patches_result=own_patches_result,
     )
 
 
