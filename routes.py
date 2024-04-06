@@ -117,6 +117,19 @@ def to_collection():
     return redirect("/kirjautunut")
 
 
+# deleting a patch from general collection
+@app.route("/deletepatch", methods=["POST"])
+def delete_from_collection():
+    patch_id = request.form["id"]
+    masterpassword = request.form["masterpassword"]
+    if masterpassword != "tsohatsoha":
+        return redirect("/kirjautunut")
+    sql = text("DELETE FROM Patches WHERE id = :patch_id")
+    db.session.execute(sql, {"patch_id": patch_id})
+    db.session.commit()
+    return redirect("/kirjautunut")
+
+
 # adding patch to general collection for everyone to see
 @app.route("/new/merkki")
 def new():

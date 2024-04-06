@@ -18,11 +18,31 @@
 {% endif %}
 
 <br>
+<br>
 
 <form action="/send/new/to_collection" method="POST">
     <input type="hidden" name="id" value="{{ id }}">
     <button type="submit" class="btn btn-primary">Lisää merkki kokoelmaasi</button>
 </form>
+
+<br>
+<hr>
+<br>
+<form action="/deletepatch" method="POST">
+    <div class="form-group">
+    <input type="hidden" name="id" value="{{ id }}">
+    <input class="form-check-input" type="checkbox" value="" id="doublecheck" required>
+    <label class="form-check-label">Olen varma, että haluan poistaa tämän merkin yhteisön kokoelmasta</label>
+    </div>
+    <div class = "form-group">
+    <label class="form-check-label">Anna master-salasana poistaaksesi merkin: </label>
+    <input type="text" name="masterpassword" required>
+    </div>
+    <div class = "form-group">
+    <button type="submit" class="btn btn-danger">Poista merkki yhteisön kokoelmasta</button>
+    </div>
+</form>
+
 {% endif %}
 
 

@@ -17,13 +17,13 @@ CREATE TABLE Patches (
 
 CREATE TABLE Images (
     id SERIAL PRIMARY KEY,
-    patch_id INTEGER REFERENCES Patches(id),
+    patch_id INTEGER REFERENCES Patches(id) ON DELETE CASCADE,
     data BYTEA
 );
 
 CREATE TABLE UsersToPatches (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES Users(id),
-    patch_id INTEGER REFERENCES Patches(id),
+    patch_id INTEGER REFERENCES Patches(id) ON DELETE CASCADE,
     sent_at TIMESTAMP 
 );
