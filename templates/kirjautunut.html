@@ -20,7 +20,7 @@
 <br>
 <br>
 {% endif %}
-<a href="/merkki/{{ result.id }}">Katso lisätietoja / Lisää merkki omaan kokoelmaasi</a>
+<a class="btn btn-outline-primary btn-sm" href="/merkki/{{ result.id }}">Katso lisätietoja / Lisää merkki omaan kokoelmaasi</a>
 
 <hr>
 {% endfor %}
@@ -32,7 +32,7 @@
 {% for result in own_patches_result %}
 <p>Merkin nimi: <b> {{ result.name }}</b></p>
 <p>Lisätty omaan kokoelmaan: <b>{{result.sent_at.strftime("%Y-%m-%d %H:%M:%S")}}</b></p>
-<a href="/merkki/{{ result.patch_id  }}">Tietoja</a>
+<a class="btn btn-outline-primary btn-sm" href="/merkki/{{ result.patch_id  }}">Tietoja</a>
 <hr>
 {% endfor %}
 
@@ -42,8 +42,11 @@
 
 <br>
 <br>
-<a href="/logout" class="btn btn-primary">Kirjaudu ulos</a>
-
+<div class="btn-group">
+    <a href="/logout" class="btn btn-primary center"
+      ><span class="material-icons md-18"> logout </span> &hairsp;Kirjaudu
+      ulos</a
+    ></div>
 {% endif %}
 
 {% if not session.username %}

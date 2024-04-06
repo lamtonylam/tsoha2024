@@ -1,41 +1,45 @@
-{% extends 'base.html' %}
-{% block title %}Haalarimerkkidex{% endblock %}
-
+{% extends 'base.html' %} {% block title %}Haalarimerkki DEX{% endblock %}
 {% block content %}
+  <br />
+  <h1>Tervetuloa käyttämään haalarimerkkiDEXiä</h1>
+  <br />
+  <h5><i>{{ random_text }}</i></h5>
+  <br />
 
-<br>
-    <h1>Tervetuloa käyttämään haalarimerkkiDEXiä</h1>
-    <br>
-    <h5><i>{{random_text}}</i></h5>
-    <br>
-
-
-<!-- if user has not logged on, display buttons to log in or register -->
-{% if not session.username %}
+  <!-- if user has not logged on, display buttons to log in or register -->
+  {% if not session.username %}
     <div class="btn-group">
-        <a href="/login" class="btn btn-primary btn-important">Kirjaudu sisään</a>
-        <span>&nbsp;</span> <!-- Add a space between the buttons -->
-        <a href="/register" class="btn btn-primary">Rekisteröidy</a>
+      <a href="/login" class="btn btn-primary btn-important center"
+        ><span class="material-icons md-18"> login </span> &hairsp; Kirjaudu
+        sisään</a
+      >
+      <span>&nbsp;</span>
+      <!-- Add a space between the buttons -->
+      <a href="/register" class="btn btn-primary centery"
+        ><span class="material-icons md-18"> how_to_reg </span>
+        &hairsp;Rekisteröidy</a
+      >
     </div>
-{% endif %}
+  {% endif %}
 
-
-<!-- display success message upon successful login/registration -->
-{% if message %}
+  <!-- display success message upon successful login/registration -->
+  {% if message %}
     <div class="alert alert-success text-center" role="alert">
-        {{ message }}
+      {{ message }}
     </div>
-{% endif %}
+  {% endif %}
 
-<!-- if user has logged on, display this block  -->
-{% if session.username %}
+  <!-- if user has logged on, display this block  -->
+  {% if session.username %}
     <p>Olet kirjautunut nimellä: <b>{{ session.username }}</b></p>
 
-    <br>
+    <br />
 
-    <a href="/logout" class="btn btn-primary">Kirjaudu ulos</a>
-{% endif %}
-
-
-
+    <div class="btn-group">
+      <a href="/logout" class="btn btn-primary center"
+        ><span class="material-icons md-18"> logout </span> &hairsp;Kirjaudu
+        ulos</a
+      >
+    </div>
+  {% endif %}
 {% endblock %}
