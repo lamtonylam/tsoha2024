@@ -3,13 +3,29 @@
 
 {% block content %}
 
+<script>
+  $(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
 
 {% if session.username %}
 <p>Olet kirjautunut nimellä: <b>{{ session.username }}</b></p>
 
 
-
 <h4>Kaikki yhteisön haalarimerkit</h4>
+
+<div class="btn-group" role="group">
+    {% if request.args.get("sort") == "desc" %}
+      <button class="btn btn-primary btn-sm" onclick="window.location.href='/kirjautunut?sort=asc'" data-toggle="tooltip" title="Paina tästä lajittelaaksesi vanhimmat merkit ensin">Lajittele vanhin ensin</button>
+    {% endif %}
+    {% if request.args.get("sort") == "asc" %}
+    <button class="btn btn-primary btn-sm" onclick="window.location.href='/kirjautunut?sort=desc'" data-toggle="tooltip" title="Paina tästä lajittelaaksesi uusimmat merkit ensin">Lajittele uusin ensin</button>
+    {% endif %}
+    {% if not request.args.get("sort") %}
+    <button class="btn btn-primary btn-sm" onclick="window.location.href='/kirjautunut?sort=desc'" data-toggle="tooltip" title="Paina tästä lajittelaaksesi uusimmat merkit ensin">Lajittele uusin ensin</button>
+    {% endif %}
+  </div>
 
 <hr>
 {% for result, image in results %}
@@ -54,4 +70,6 @@
 <button onclick="window.location.href='/login'" class="btn btn-primary">Kirjaudu sisään</button>
 {% endif %}
 
+
 {% endblock %}
+

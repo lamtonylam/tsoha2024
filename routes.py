@@ -38,7 +38,14 @@ def kirjautnut():
     if users.get_username() == "":
         return render_template("kirjautunut.html")
 
-    query = text("SELECT id, name FROM Patches;")
+    # sort patches by id, default is ascending, can be changed by adding ?sort to the url
+    sort_order = request.args.get("sort")
+    if sort_order == "asc":
+        query = text("SELECT id, name FROM Patches ORDER BY id ASC;")
+    elif sort_order == "desc":
+        query = text("SELECT id, name FROM Patches ORDER BY id DESC;")
+    else:
+        query = text("SELECT id, name FROM Patches ORDER BY id ASC;")
     result = db.session.execute(query)
     results = result.fetchall()
 
