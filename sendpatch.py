@@ -1,6 +1,7 @@
 from sqlalchemy.sql import text
 from db import db
 from PIL import Image
+from PIL import ImageOps
 from io import BytesIO
 from flask import render_template
 
@@ -32,6 +33,9 @@ def insert_image(file, patch_id):
     # Read image data
     image_data = file.read()
     image = Image.open(BytesIO(image_data))
+
+    # Rotate the image based on EXIF data
+    image = ImageOps.exif_transpose(image)
 
     # Resize to 200 x 200
     image.thumbnail((200, 200))
