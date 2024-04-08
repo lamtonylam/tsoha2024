@@ -47,63 +47,65 @@
     </head>
 
     <body>
+        <div class="container-nav">
         <nav class="navbar navbar-expand-sm navbar-light bg-light">
-            <a class="navbar-brand" href="/">HaalarimerkkiDEX</a>
-            <button
-                class="navbar-toggler"
-                type="button"
-                data-toggle="collapse"
-                data-target="#navbarNavAltMarkup"
-                aria-controls="navbarNavAltMarkup"
-                aria-expanded="false"
-                aria-label="Toggle navigation"
-            >
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                <div class="navbar-nav mr-auto">
-                    <!-- <a class="nav-item nav-link active" href="">Home <span class="sr-only">(current)</span></a> -->
-                    <a class="nav-item nav-link active" href="/kirjautunut"
-                        >Haalarimerkit</a
-                    >
-                    <a class="nav-item nav-link active" href="/new/merkki"
-                        >Lisää haalarimerkki yhteisöön</a
-                    >
+                <a class="navbar-brand" href="/">HaalarimerkkiDEX</a>
+                <button
+                    class="navbar-toggler"
+                    type="button"
+                    data-toggle="collapse"
+                    data-target="#navbarNavAltMarkup"
+                    aria-controls="navbarNavAltMarkup"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation"
+                >
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                    <div class="navbar-nav mr-auto">
+                        <!-- <a class="nav-item nav-link active" href="">Home <span class="sr-only">(current)</span></a> -->
+                        <a class="nav-item nav-link active" href="/kirjautunut"
+                            >Haalarimerkit</a
+                        >
+                        <a class="nav-item nav-link active" href="/new/merkki"
+                            >Lisää haalarimerkki yhteisöön</a
+                        >
+                    </div>
+                    {% if session.username %}
+                    <div class="navbar-nav ml-auto">
+                        <a class="nav-item nav-link active" href="/profile"
+                            >Profiili</a
+                        >
+                        &nbsp; &nbsp; &nbsp;
+                        <a
+                            class="btn btn-outline-secondary center"
+                            href="/logout"
+                            role="button"
+                            ><span class="material-icons md-18"> logout </span>
+                            &hairsp; Kirjaudu ulos</a
+                        >
+                    </div>
+                    {% endif %} {% if not session.username %}
+                    <div class="navbar-nav ml-auto">
+                        <a
+                            class="btn btn-outline-primary center"
+                            href="/login"
+                            role="button"
+                            ><span class="material-icons md-18"> login </span>
+                            &hairsp; Kirjaudu sisään</a
+                        >&nbsp;
+                        <a
+                            class="btn btn-outline-primary center"
+                            href="/register"
+                            role="button"
+                            ><span class="material-icons md-18"> how_to_reg </span>
+                            &hairsp;Rekisteröidy</a
+                        >
+                    </div>
                 </div>
-                {% if session.username %}
-                <div class="navbar-nav ml-auto">
-                    <a class="nav-item nav-link active" href="/profile"
-                        >Profiili</a
-                    >
-                    &nbsp; &nbsp; &nbsp;
-                    <a
-                        class="btn btn-outline-secondary center"
-                        href="/logout"
-                        role="button"
-                        ><span class="material-icons md-18"> logout </span>
-                        &hairsp; Kirjaudu ulos</a
-                    >
-                </div>
-                {% endif %} {% if not session.username %}
-                <div class="navbar-nav ml-auto">
-                    <a
-                        class="btn btn-outline-primary center"
-                        href="/login"
-                        role="button"
-                        ><span class="material-icons md-18"> login </span>
-                        &hairsp; Kirjaudu sisään</a
-                    >&nbsp;
-                    <a
-                        class="btn btn-outline-primary center"
-                        href="/register"
-                        role="button"
-                        ><span class="material-icons md-18"> how_to_reg </span>
-                        &hairsp;Rekisteröidy</a
-                    >
-                </div>
-            </div>
-            {% endif %}
-        </nav>
+                {% endif %}
+            </nav>
+        </div>
 
         <div class="content-centered">{% block content %} {% endblock %}</div>
 
