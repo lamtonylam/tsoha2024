@@ -22,6 +22,7 @@
 
 <form action="/send/new/to_collection" method="POST">
     <input type="hidden" name="id" value="{{ id }}">
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     <button type="submit" class="btn btn-primary">Lisää merkki kokoelmaasi</button>
 </form>
 
@@ -29,6 +30,7 @@
 <hr>
 <br>
 <form action="/deletepatch" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     <div class="form-group">
     <input type="hidden" name="id" value="{{ id }}">
     <input class="form-check-input" for="doublecheck" type="checkbox" value="" id="doublecheck" required>

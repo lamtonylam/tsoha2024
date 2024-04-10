@@ -5,6 +5,7 @@ import users
 from sqlalchemy.sql import text
 from db import db
 from flask import make_response
+from flask import abort
 
 # import base64 for image encoding
 import base64
@@ -112,6 +113,8 @@ def merkki(id):
 # adding a patch from general collection to user's own collection
 @app.route("/send/new/to_collection", methods=["POST"])
 def to_collection():
+    if session["csrf_token"] != request.form["csrf_token"]:
+        abort(403)
     sql_set_timezone = text("SET TIME ZONE 'Europe/Helsinki';")
     db.session.execute(sql_set_timezone)
     patch_id = request.form["id"]
@@ -127,6 +130,8 @@ def to_collection():
 # deleting a patch from general collection
 @app.route("/deletepatch", methods=["POST"])
 def delete_from_collection():
+    if session["csrf_token"] != request.form["csrf_token"]:
+        abort(403)
     patch_id = request.form["id"]
     masterpassword = request.form["masterpassword"]
     if masterpassword != "tsohatsoha":
@@ -151,6 +156,10 @@ def send():
         return render_template(
             "new_merkki.html", error="Merkin nimi on liian pitkä, max 100 merkkiä"
         )
+        
+    if session["csrf_token"] != request.form["csrf_token"]:
+        abort(403)
+
     # get file from html form
     file = request.files.get("file")
 

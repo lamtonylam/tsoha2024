@@ -37,6 +37,7 @@
         <input type="file" for="formFile" class="form-label" id="file" name="file" accept=".jpeg,.jpg">
         <br>
         <br>
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
         <input type="submit" class="btn btn-primary" value="Lähetä">
     </form>
     {% endif %}
