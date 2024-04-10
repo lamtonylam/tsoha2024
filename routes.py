@@ -147,6 +147,10 @@ def new():
 @app.route("/send/new/merkki", methods=["POST"])
 def send():
     name = request.form.get("nimi")
+    if len(name) > 100:
+        return render_template(
+            "new_merkki.html", error="Merkin nimi on liian pitkä, max 100 merkkiä"
+        )
     # get file from html form
     file = request.files.get("file")
 
