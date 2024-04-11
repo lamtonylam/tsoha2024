@@ -37,10 +37,10 @@ def insert_image(file, patch_id):
     image = ImageOps.exif_transpose(image)
 
     # Resize to 200 x 200
-    image.thumbnail((200, 200))
+    image.thumbnail((400, 400))
     output = BytesIO()
     # Compress the image to 60% quality
-    image.save(output, format="JPEG", quality=60)
+    image.save(output, format="JPEG", quality=80)
     data = output.getvalue()
     # Insert the compressed and resized image into the database
     sql = text("INSERT INTO Images(patch_id, data) VALUES (:patch_id, :data)")
