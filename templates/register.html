@@ -1,54 +1,55 @@
-{% extends 'base.html' %} {% block title %}Rekisteröidy{% endblock %} {% block
-content %}
+{% extends 'base.html' %} {% block title %}Rekisteröidy{% endblock %}
+{%
+  block
+  content
+%}
+  <!-- alert if something went wrong during the registration process -->
+  {% if message %}
+    <div class="alert alert-danger text-center" role="alert">{{ message }}</div>
+  {% endif %}
 
-<!-- alert if something went wrong during the registration process -->
-{% if message %}
-<div class="alert alert-danger text-center" role="alert">{{ message }}</div>
-{% endif %}
-
-<form action="/register" method="post">
+  <form action="/register" method="post">
     <div class="mb-3">
-        <p>Käyttäjätunnuksen tulee olla 1-20 merkkiä pitkä</p>
-        Käyttäjätunnus:
+      <p>Käyttäjätunnuksen tulee olla 1-20 merkkiä pitkä</p>
+      Käyttäjätunnus:
+      <input
+        type="text"
+        name="username"
+        class="form-control"
+        minlength="1"
+        maxlength="20"
+        placeholder="Käyttäjätunnus"
+      />
+      <p></p>
+      <p>Salasanan tulee olla 8-20 merkkiä pitkä</p>
+      Salasana:
+      <input
+        type="password"
+        name="password1"
+        class="form-control"
+        minlength="8"
+        maxlength="20"
+        placeholder="Salasana"
+      />
+      <p>
+        Salasana uudestaan:
         <input
-            type="text"
-            name="username"
-            class="form-control"
-            minlength="1"
-            maxlength="20"
-            placeholder="Käyttäjätunnus"
+          type="password"
+          name="password2"
+          class="form-control"
+          minlength="8"
+          maxlength="20"
+          placeholder="Salasana uudestaan"
         />
-        <p></p>
-        <p>Salasanan tulee olla 8-20 merkkiä pitkä</p>
-        Salasana:
-        <input
-            type="password"
-            name="password1"
-            class="form-control"
-            minlength="8"
-            maxlength="20"
-            placeholder="Salasana"
-        />
-        <p>
-            Salasana uudestaan:
-            <input
-                type="password"
-                name="password2"
-                class="form-control"
-                minlength="8"
-                maxlength="20"
-                placeholder="Salasana uudestaan"
-            />
-        </p>
+      </p>
 
-        <p>
-            <input class="btn btn-primary" type="submit" value="Luo tunnus" />
-        </p>
+      <p>
+        <input class="btn btn-primary" type="submit" value="Luo tunnus" />
+      </p>
     </div>
-</form>
+  </form>
 
-<a class="btn btn-outline-primary" href="/login" role="button"
+  <a class="btn btn-outline-primary" href="/login" role="button"
     >Onko sinulla jo käyttäjä? Kirjaudu tästä</a
->
-
+  >
 {% endblock %}

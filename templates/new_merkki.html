@@ -2,50 +2,61 @@
 
 {% block title %}Uusi merkki{% endblock %}
 
-
 {% block content %}
+  <!-- if error when submitting new patch to general collection -->
+  {% if error %}
+    <div class="alert alert-danger" role="alert">{{ error }}</div>
+  {% endif %}
 
-<!-- if error when submitting new patch to general collection -->
-{% if error %}
-    <div class="alert alert-danger" role="alert">
-        {{ error }}
-    </div>
-{% endif %}
+  <!-- success message for successfully adding patch to general collection -->
+  {% if success %}
+    <div class="alert alert-success" role="alert">{{ success }}</div>
+  {% endif %}
 
-
-<!-- success message for successfully adding patch to general collection -->
-{% if success %}
-    <div class="alert alert-success" role="alert">
-        {{ success }}
-    </div>
-{% endif %}
-
-
-    {% if session.username %}
+  {% if session.username %}
     <p>Olet kirjautunut nimellä <b>{{ session.username }}</b></p>
 
     <form action="/send/new/merkki" method="POST" enctype="multipart/form-data">
-        <br>
-        <p>Lisää uusi haalarimerkki:</p>
-        <div class="center">
+      <br />
+      <p>Lisää uusi haalarimerkki:</p>
+      <div class="center">
         <div class="w-50 p-3">
-        <input type="text" class="form-control" id="nimi" name="nimi" placeholder="Haalarimerkin nimi:" required maxlength="100">
-        </div></div>
-        <br>
-        <p>Lisää kuva:</p>
-        <p>Kuvan pitää olla .jpg tai .jpeg muodossa</p>
-        <input type="file" for="formFile" class="form-label" id="file" name="file" accept=".jpeg,.jpg">
-        <br>
-        <br>
-        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-        <input type="submit" class="btn btn-primary" value="Lähetä">
+          <input
+            type="text"
+            class="form-control"
+            id="nimi"
+            name="nimi"
+            placeholder="Haalarimerkin nimi:"
+            required
+            maxlength="100"
+          />
+        </div>
+      </div>
+      <br />
+      <p>Lisää kuva:</p>
+      <p>Kuvan pitää olla .jpg tai .jpeg muodossa</p>
+      <input
+        type="file"
+        for="formFile"
+        class="form-label"
+        id="file"
+        name="file"
+        accept=".jpeg,.jpg"
+      />
+      <br />
+      <br />
+      <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+      <input type="submit" class="btn btn-primary" value="Lähetä" />
     </form>
-    {% endif %}
+  {% endif %}
 
-    {% if not session.username %}
-    <p>Et ole kirjautunut sisään. Kirjaudu sisään, jotta voit lisätä uusia haalarimerkkejä.</p>
-    <button onclick="window.location.href='/login'" class="btn btn-primary">Kirjaudu sisään</button>
-    {% endif %}
-
-
+  {% if not session.username %}
+    <p>
+      Et ole kirjautunut sisään. Kirjaudu sisään, jotta voit lisätä uusia
+      haalarimerkkejä.
+    </p>
+    <button onclick="window.location.href='/login'" class="btn btn-primary">
+      Kirjaudu sisään
+    </button>
+  {% endif %}
 {% endblock %}

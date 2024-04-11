@@ -2,74 +2,103 @@
 {% block title %}Merkit{% endblock %}
 
 {% block content %}
+  <script>
+    $(function () {
+      $('[data-toggle="tooltip"]').tooltip();
+    });
+  </script>
 
-<script>
-  $(function () {
-    $('[data-toggle="tooltip"]').tooltip()
-  })
-</script>
+  {% if session.username %}
+    <p>Olet kirjautunut nimellä: <b>{{ session.username }}</b></p>
 
-{% if session.username %}
-<p>Olet kirjautunut nimellä: <b>{{ session.username }}</b></p>
+    <h4>Kaikki yhteisön haalarimerkit</h4>
 
+    <div class="btn-group" role="group">
+      {% if request.args.get("sort") == "desc" %}
+        <button
+          class="btn btn-primary btn-sm"
+          onclick="window.location.href='/kirjautunut?sort=asc'"
+          data-toggle="tooltip"
+          title="Paina tästä lajittelaaksesi vanhimmat merkit ensin"
+        >
+          Lajittele vanhin ensin
+        </button>
+      {% endif %}
+      {% if request.args.get("sort") == "asc" %}
+        <button
+          class="btn btn-primary btn-sm"
+          onclick="window.location.href='/kirjautunut?sort=desc'"
+          data-toggle="tooltip"
+          title="Paina tästä lajittelaaksesi uusimmat merkit ensin"
+        >
+          Lajittele uusin ensin
+        </button>
+      {% endif %}
+      {% if not request.args.get("sort") %}
+        <button
+          class="btn btn-primary btn-sm"
+          onclick="window.location.href='/kirjautunut?sort=desc'"
+          data-toggle="tooltip"
+          title="Paina tästä lajittelaaksesi uusimmat merkit ensin"
+        >
+          Lajittele uusin ensin
+        </button>
+      {% endif %}
+    </div>
 
-<h4>Kaikki yhteisön haalarimerkit</h4>
+    <hr />
+    {% for result, image in results %}
+      <p>Merkin nimi: <b>{{ result.name }}</b></p>
+      {% if image %}
+        <img
+          src="data:image/jpeg;base64,{{ image }}"
+          alt="Image for patch {{ result[1] }}"
+          style="max-width: 100px; height: auto;"
+        />
+        <br />
+        <br />
+      {% endif %}
+      <a class="btn btn-outline-primary btn-sm" href="/merkki/{{ result.id }}"
+        >Katso lisätietoja / Lisää merkki omaan kokoelmaasi</a
+      >
 
-<div class="btn-group" role="group">
-    {% if request.args.get("sort") == "desc" %}
-      <button class="btn btn-primary btn-sm" onclick="window.location.href='/kirjautunut?sort=asc'" data-toggle="tooltip" title="Paina tästä lajittelaaksesi vanhimmat merkit ensin">Lajittele vanhin ensin</button>
-    {% endif %}
-    {% if request.args.get("sort") == "asc" %}
-    <button class="btn btn-primary btn-sm" onclick="window.location.href='/kirjautunut?sort=desc'" data-toggle="tooltip" title="Paina tästä lajittelaaksesi uusimmat merkit ensin">Lajittele uusin ensin</button>
-    {% endif %}
-    {% if not request.args.get("sort") %}
-    <button class="btn btn-primary btn-sm" onclick="window.location.href='/kirjautunut?sort=desc'" data-toggle="tooltip" title="Paina tästä lajittelaaksesi uusimmat merkit ensin">Lajittele uusin ensin</button>
-    {% endif %}
-  </div>
+      <hr />
+    {% endfor %}
 
-<hr>
-{% for result, image in results %}
-<p>Merkin nimi: <b>{{ result.name }}</b></p>
-{% if image %}
-<img src="data:image/jpeg;base64,{{ image }}" alt="Image for patch {{ result[1] }}"
-    style="max-width: 100px; height: auto;">
-<br>
-<br>
-{% endif %}
-<a class="btn btn-outline-primary btn-sm" href="/merkki/{{ result.id }}">Katso lisätietoja / Lisää merkki omaan kokoelmaasi</a>
+    <h4>Omat merkit:</h4>
 
-<hr>
-{% endfor %}
+    <hr />
+    {% for result in own_patches_result %}
+      <p>Merkin nimi: <b> {{ result.name }}</b></p>
+      <p>
+        Lisätty omaan kokoelmaan:
+        <b>{{ result.sent_at.strftime("%Y-%m-%d %H:%M:%S") }}</b>
+      </p>
+      <a
+        class="btn btn-outline-primary btn-sm"
+        href="/merkki/{{ result.patch_id }}"
+        >Tietoja</a
+      >
+      <hr />
+    {% endfor %}
 
+    <br />
+    <br />
+    <div class="btn-group">
+      <a href="/logout" class="btn btn-primary center"
+        ><span class="material-icons md-18"> logout </span> &hairsp;Kirjaudu
+        ulos</a
+      >
+    </div>
+  {% endif %}
 
-<h4>Omat merkit:</h4>
-
-<hr>
-{% for result in own_patches_result %}
-<p>Merkin nimi: <b> {{ result.name }}</b></p>
-<p>Lisätty omaan kokoelmaan: <b>{{result.sent_at.strftime("%Y-%m-%d %H:%M:%S")}}</b></p>
-<a class="btn btn-outline-primary btn-sm" href="/merkki/{{ result.patch_id  }}">Tietoja</a>
-<hr>
-{% endfor %}
-
-
-
-
-
-<br>
-<br>
-<div class="btn-group">
-    <a href="/logout" class="btn btn-primary center"
-      ><span class="material-icons md-18"> logout </span> &hairsp;Kirjaudu
-      ulos</a
-    ></div>
-{% endif %}
-
-{% if not session.username %}
-<p>Et ole kirjautunut sisään. Kirjaudu sisään, jotta voit lisätä uusia haalarimerkkejä.</p>
-<button onclick="window.location.href='/login'" class="btn btn-primary">Kirjaudu sisään</button>
-{% endif %}
-
-
+  {% if not session.username %}
+    <p>
+      Et ole kirjautunut sisään. Kirjaudu sisään, jotta voit lisätä uusia
+      haalarimerkkejä.
+    </p>
+    <button onclick="window.location.href='/login'" class="btn btn-primary">
+      Kirjaudu sisään
+    </button>
+  {% endif %}
 {% endblock %}
-

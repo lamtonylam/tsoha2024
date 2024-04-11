@@ -4,34 +4,33 @@
 
 {% block content %}
 
-{% if session.username %}
+  {% if session.username %}
+    <p>Sinun käyttäjätunnuksesi on: <b>{{ username }}</b></p>
 
-<p>Sinun käyttäjätunnuksesi on: <b>{{username}}</b></p>
+    <p>
+      Olet lisännyt omaan kokoelmaasi: <b>{{ patch_amount }}</b> haalarimerkkiä
+    </p>
 
-<p>Olet lisännyt omaan kokoelmaasi: <b>{{patch_amount}}</b> haalarimerkkiä</p>
+    <br />
 
-<br>
+    <h4>Omat merkit:</h4>
 
-<h4>Omat merkit:</h4>
+    <hr />
+    {% for result in own_patches_result %}
+      <p>Merkin nimi: <b> {{ result.name }}</b></p>
+      <p>
+        Lisätty omaan kokoelmaan:
+        <b>{{ result.sent_at.strftime("%Y-%m-%d %H:%M:%S") }}</b>
+      </p>
+      <a href="/merkki/{{ result.patch_id }}">Tietoja</a>
+      <hr />
+    {% endfor %}
+  {% endif %}
 
-<hr>
-{% for result in own_patches_result %}
-<p>Merkin nimi: <b> {{ result.name }}</b></p>
-<p>Lisätty omaan kokoelmaan: <b>{{result.sent_at.strftime("%Y-%m-%d %H:%M:%S")}}</b></p>
-<a href="/merkki/{{ result.patch_id  }}">Tietoja</a>
-<hr>
-{% endfor %}
-
-
-
-{% endif %}
-
-
-{% if not session.username %}
-<p>Et ole kirjautunut sisään. Kirjaudu sisään.</p>
-<button onclick="window.location.href='/login'" class="btn btn-primary">Kirjaudu sisään</button>
-{% endif %}
-
-
-
+  {% if not session.username %}
+    <p>Et ole kirjautunut sisään. Kirjaudu sisään.</p>
+    <button onclick="window.location.href='/login'" class="btn btn-primary">
+      Kirjaudu sisään
+    </button>
+  {% endif %}
 {% endblock %}

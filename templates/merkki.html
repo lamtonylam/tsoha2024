@@ -4,59 +4,69 @@
 
 {% block content %}
 
+  {% if session.username %}
+    <p>Merkin nimi: <b>{{ nimi }}</b></p>
 
-{% if session.username %}
+    <p>Merkin lisännyt käyttäjä: <b>{{ created_by_user }}</b></p>
 
-<p>Merkin nimi: <b>{{ nimi }}</b></p>
+    <!-- display image if photo is not None -->
+    {% if photo %}
+      <p>Kuva haalarimerkistä:</p>
+      <img src="data:image/jpeg;base64,{{ photo }}" alt="Patch Image" />
+    {% endif %}
 
-<p>Merkin lisännyt käyttäjä: <b>{{created_by_user}}</b></p>
+    <br />
+    <br />
 
-<!-- display image if photo is not None -->
-{% if photo %}
-    <p>Kuva haalarimerkistä:</p>
-    <img src="data:image/jpeg;base64,{{ photo }}" alt="Patch Image">
-{% endif %}
+    <form action="/send/new/to_collection" method="POST">
+      <input type="hidden" name="id" value="{{ id }}" />
+      <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+      <button type="submit" class="btn btn-primary">
+        Lisää merkki kokoelmaasi
+      </button>
+    </form>
 
-<br>
-<br>
+    <br />
+    <hr />
+    <br />
+    <form action="/deletepatch" method="POST">
+      <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+      <div class="form-group">
+        <input type="hidden" name="id" value="{{ id }}" />
+        <input
+          class="form-check-input"
+          for="doublecheck"
+          type="checkbox"
+          value=""
+          id="doublecheck"
+          required
+        />
+        <label class="form-check-label" for="doublecheck"
+          >Olen varma, että haluan poistaa tämän merkin yhteisön
+          kokoelmasta</label
+        >
+      </div>
+      <div class="form-group">
+        <label class="form-check-label"
+          >Anna master-salasana poistaaksesi merkin:
+        </label>
+        <input type="text" name="masterpassword" required />
+      </div>
+      <div class="form-group">
+        <button type="submit" class="btn btn-danger">
+          Poista merkki yhteisön kokoelmasta
+        </button>
+      </div>
+    </form>
+  {% endif %}
 
-<form action="/send/new/to_collection" method="POST">
-    <input type="hidden" name="id" value="{{ id }}">
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-    <button type="submit" class="btn btn-primary">Lisää merkki kokoelmaasi</button>
-</form>
-
-<br>
-<hr>
-<br>
-<form action="/deletepatch" method="POST">
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-    <div class="form-group">
-    <input type="hidden" name="id" value="{{ id }}">
-    <input class="form-check-input" for="doublecheck" type="checkbox" value="" id="doublecheck" required>
-    <label class="form-check-label" for="doublecheck">Olen varma, että haluan poistaa tämän merkin yhteisön kokoelmasta</label>
-    </div>
-    <div class = "form-group">
-    <label class="form-check-label">Anna master-salasana poistaaksesi merkin: </label>
-    <input type="text" name="masterpassword" required>
-    </div>
-    <div class = "form-group">
-    <button type="submit" class="btn btn-danger">Poista merkki yhteisön kokoelmasta</button>
-    </div>
-</form>
-
-{% endif %}
-
-
-
-
-{% if not session.username %}
-<p>Et ole kirjautunut sisään. Kirjaudu sisään, jotta voit lisätä uusia haalarimerkkejä.</p>
-<button onclick="window.location.href='/login'" class="btn btn-primary">Kirjaudu sisään</button>
-{% endif %}
-
+  {% if not session.username %}
+    <p>
+      Et ole kirjautunut sisään. Kirjaudu sisään, jotta voit lisätä uusia
+      haalarimerkkejä.
+    </p>
+    <button onclick="window.location.href='/login'" class="btn btn-primary">
+      Kirjaudu sisään
+    </button>
+  {% endif %}
 {% endblock %}
-
-
-
-
