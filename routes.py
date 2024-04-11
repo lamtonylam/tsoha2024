@@ -4,15 +4,10 @@ from flask import session
 import users
 from sqlalchemy.sql import text
 from db import db
-from flask import make_response
 from flask import abort
 
 # import base64 for image encoding
 import base64
-
-# pillow image compression
-from PIL import Image
-from io import BytesIO
 
 # for random texts in index.html
 import random_text_generator

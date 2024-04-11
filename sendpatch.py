@@ -3,7 +3,6 @@ from db import db
 from PIL import Image
 from PIL import ImageOps
 from io import BytesIO
-from flask import render_template
 
 
 # Function to check if patchname exists before adding it into Patches which is the general collection.
