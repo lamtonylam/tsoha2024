@@ -128,57 +128,55 @@ def delete_from_collection():
 
 
 # adding patch to general collection for everyone to see
-@app.route("/new/merkki")
-def new():
-    return render_template("new_merkki.html")
-
-
-# adding patch to general collection for everyone to see
-@app.route("/send/new/merkki", methods=["POST"])
+@app.route("/new/merkki", methods=["GET", "POST"])
 def send():
-    name = request.form.get("nimi")
-    if len(name) > 100:
-        return render_template(
-            "new_merkki.html", error="Merkin nimi on liian pitkä, max 100 merkkiä"
-        )
-
-    if session["csrf_token"] != request.form["csrf_token"]:
-        abort(403)
-
-    # get file from html form
-    file = request.files.get("file")
-
-    # check if file is empty
-    if file:
-        file_name = file.filename
-        # check if file is jpg or jpeg
-        if not file_name.lower().endswith((".jpg", ".jpeg")):
+    if request.method == "GET":
+        return render_template("new_merkki.html")
+    elif request.method == "POST":
+        name = request.form.get("nimi")
+        if len(name) > 100:
             return render_template(
-                "new_merkki.html", error="Vain .jpg ja .jpeg tiedostot sallittu"
+                "new_merkki.html", error="Merkin nimi on liian pitkä, max 100 merkkiä"
             )
 
-    userid = users.user_id()
+        if session["csrf_token"] != request.form["csrf_token"]:
+            abort(403)
 
-    # testing if name is already in the database
-    # return True if name is already in the database
-    if sendpatch.patchname_exists(name) is True:
-        # return error message if name is already in the database and break out of function
-        return render_template("new_merkki.html", error="Merkki on jo olemassa")
+        # get file from html form
+        file = request.files.get("file")
 
-    # insert the patch to the database
-    sendpatch.insert_patch_into_generalcollection(name, userid)
+        # check if file is empty
+        if file:
+            file_name = file.filename
+            # check if file is jpg or jpeg
+            if not file_name.lower().endswith((".jpg", ".jpeg")):
+                return render_template(
+                    "new_merkki.html", error="Vain .jpg ja .jpeg tiedostot sallittu"
+                )
 
-    # Get the id of the created patch, for inserting image.
-    patch_id = sendpatch.get_patch_id(name)
+        userid = users.user_id()
 
-    if file:
-        # insert image to database
-        sendpatch.insert_image(file, patch_id)
+        # testing if name is already in the database
+        # return True if name is already in the database
+        if sendpatch.patchname_exists(name) is True:
+            # return error message if name is already in the database and break out of function
+            return render_template("new_merkki.html", error="Merkki on jo olemassa")
 
-    # if all is okay return kirjautunut page
-    return render_template(
-        "new_merkki.html", success="Merkki lisätty yhteiseen kokoelmaan onnistuneesti"
-    )
+        # insert the patch to the database
+        sendpatch.insert_patch_into_generalcollection(name, userid)
+
+        # Get the id of the created patch, for inserting image.
+        patch_id = sendpatch.get_patch_id(name)
+
+        if file:
+            # insert image to database
+            sendpatch.insert_image(file, patch_id)
+
+        # if all is okay return kirjautunut page
+        return render_template(
+            "new_merkki.html",
+            success="Merkki lisätty yhteiseen kokoelmaan onnistuneesti",
+        )
 
 
 @app.route("/register", methods=["GET", "POST"])
