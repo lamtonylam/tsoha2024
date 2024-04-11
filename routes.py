@@ -16,6 +16,9 @@ import random_text_generator
 # module import for sending patches into general collection
 import sendpatch
 
+# module for patch_view individual patch
+import patch_view
+
 
 @app.route("/")
 def index():
@@ -76,19 +79,9 @@ def kirjautnut():
 @app.route("/merkki/<int:id>")
 def merkki(id):
     # Fetch patch name and user id of the patch
-    query_patch = text("SELECT name, created_by_user FROM Patches WHERE id = :id;")
-    result_patch = db.session.execute(query_patch, {"id": id})
-    row = result_patch.fetchone()
-    patch_name = row[0]
-    created_by_user = row[1]
-
-    query_username = text("SELECT username FROM Users WHERE id = :id;")
-    created_by_user = db.session.execute(query_username, {"id": created_by_user})
-    created_by_user = created_by_user.fetchone()[0]
-
-    # Fetch image data
-    query_image = text("SELECT data FROM images WHERE patch_id=:patch_id")
-    result_image = db.session.execute(query_image, {"patch_id": id})
+    patch_name = patch_view.get_patch_name(id)
+    created_by_user = patch_view.get_created_by_user(id)
+    result_image = patch_view.get_image(id)
     try:
         data = result_image.fetchone()[0] if result_image else None
     except:
@@ -115,15 +108,9 @@ def merkki(id):
 def to_collection():
     if session["csrf_token"] != request.form["csrf_token"]:
         abort(403)
-    sql_set_timezone = text("SET TIME ZONE 'Europe/Helsinki';")
-    db.session.execute(sql_set_timezone)
     patch_id = request.form["id"]
     user_id = users.user_id()
-    sql = text(
-        "INSERT INTO UsersToPatches (patch_id, user_id, sent_at) VALUES (:patch_id, :user_id, NOW())"
-    )
-    db.session.execute(sql, {"patch_id": patch_id, "user_id": user_id})
-    db.session.commit()
+    patch_view.patch_into_collection(patch_id, user_id)
     return redirect("/kirjautunut")
 
 
@@ -136,9 +123,7 @@ def delete_from_collection():
     masterpassword = request.form["masterpassword"]
     if masterpassword != getenv("master_key"):
         return redirect("/kirjautunut")
-    sql = text("DELETE FROM Patches WHERE id = :patch_id")
-    db.session.execute(sql, {"patch_id": patch_id})
-    db.session.commit()
+    patch_view.delete_patch(patch_id)
     return redirect("/kirjautunut")
 
 
