@@ -35,6 +35,7 @@ Navigate into the correct folder containing the repository
 Create a .env environment file with the following variables.    
 `DATABASE_URL=<local-postgres-address>`  
 `SECRET_KEY=<your-secret-key>`  
+`master_key=<your_key>`  
 `FLY_DEPLOYMENT=False`
 
 Enable virtual environment  

@@ -5,6 +5,7 @@ import users
 from sqlalchemy.sql import text
 from db import db
 from flask import abort
+from os import getenv
 
 # import base64 for image encoding
 import base64
@@ -129,7 +130,7 @@ def delete_from_collection():
         abort(403)
     patch_id = request.form["id"]
     masterpassword = request.form["masterpassword"]
-    if masterpassword != "tsohatsoha":
+    if masterpassword != getenv("master_key"):
         return redirect("/kirjautunut")
     sql = text("DELETE FROM Patches WHERE id = :patch_id")
     db.session.execute(sql, {"patch_id": patch_id})
