@@ -82,6 +82,10 @@ def merkki(id):
     patch_name = row[0]
     created_by_user = row[1]
 
+    query_username = text("SELECT username FROM Users WHERE id = :id;")
+    created_by_user = db.session.execute(query_username, {"id": created_by_user})
+    created_by_user = created_by_user.fetchone()[0]
+
     # Fetch image data
     query_image = text("SELECT data FROM images WHERE patch_id=:patch_id")
     result_image = db.session.execute(query_image, {"patch_id": id})
@@ -152,7 +156,7 @@ def send():
         return render_template(
             "new_merkki.html", error="Merkin nimi on liian pitkä, max 100 merkkiä"
         )
-        
+
     if session["csrf_token"] != request.form["csrf_token"]:
         abort(403)
 
@@ -168,7 +172,7 @@ def send():
                 "new_merkki.html", error="Vain .jpg ja .jpeg tiedostot sallittu"
             )
 
-    username = users.get_username()
+    userid = users.user_id()
 
     # testing if name is already in the database
     # return True if name is already in the database
@@ -177,7 +181,7 @@ def send():
         return render_template("new_merkki.html", error="Merkki on jo olemassa")
 
     # insert the patch to the database
-    sendpatch.insert_patch_into_generalcollection(name, username)
+    sendpatch.insert_patch_into_generalcollection(name, userid)
 
     # Get the id of the created patch, for inserting image.
     patch_id = sendpatch.get_patch_id(name)

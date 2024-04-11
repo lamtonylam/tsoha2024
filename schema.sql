@@ -12,7 +12,7 @@ CREATE TABLE Users (
 CREATE TABLE Patches (
     id SERIAL PRIMARY KEY, 
     name TEXT,
-    created_by_user TEXT REFERENCES Users(username)
+    created_by_user SERIAL REFERENCES Users(id)
 );
 
 CREATE TABLE Images (

@@ -14,9 +14,9 @@ def patchname_exists(name):
 
 
 # Function to insert a patch into the general collection
-def insert_patch_into_generalcollection(name, username):
-    sql = text("INSERT INTO Patches(name, created_by_user) VALUES (:name, :username)")
-    db.session.execute(sql, {"name": name, "username": username})
+def insert_patch_into_generalcollection(name, userid):
+    sql = text("INSERT INTO Patches(name, created_by_user) VALUES (:name, :userid)")
+    db.session.execute(sql, {"name": name, "userid": userid})
     db.session.commit()
 
 
