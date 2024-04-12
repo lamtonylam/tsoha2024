@@ -49,7 +49,11 @@
     <body>
         <div class="container-nav">
         <nav class="navbar navbar-expand-sm navbar-light bg-light">
+                {% if session.username %}
+                <a class="navbar-brand" href="/kirjautunut">HaalarimerkkiDEX</a>
+                {% else %}
                 <a class="navbar-brand" href="/">HaalarimerkkiDEX</a>
+                {% endif %}
                 <button
                     class="navbar-toggler"
                     type="button"
