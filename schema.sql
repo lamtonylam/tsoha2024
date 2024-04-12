@@ -2,6 +2,7 @@ DROP TABLE IF EXISTS Patches CASCADE;
 DROP TABLE IF EXISTS Images CASCADE;
 DROP TABLE IF EXISTS Users CASCADE;
 DROP TABLE IF EXISTS UsersToPatches CASCADE;
+DROP TABLE IF EXISTS Comments CASCADE;
 
 CREATE TABLE Users (
     id SERIAL PRIMARY KEY,
@@ -26,4 +27,12 @@ CREATE TABLE UsersToPatches (
     user_id INTEGER REFERENCES Users(id),
     patch_id INTEGER REFERENCES Patches(id) ON DELETE CASCADE,
     sent_at TIMESTAMP 
+);
+
+CREATE TABLE Comments (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES Users(id),
+    patch_id INTEGER REFERENCES Patches(id),
+    comment TEXT,
+    sent_at TIMESTAMP
 );

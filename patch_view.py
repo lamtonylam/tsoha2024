@@ -1,5 +1,6 @@
 from sqlalchemy.sql import text
 from db import db
+from flask import flash
 
 
 def get_patch_name(id):
@@ -33,6 +34,24 @@ def get_image(id):
     return result_image
 
 
+def get_comments(id):
+    # Fetch comments of the patch 
+    sql = text(
+        """SELECT comments.comment, comments.sent_at, users.username 
+        FROM comments, users 
+        WHERE patch_id = :patch_id 
+        AND comments.user_id = users.id"""
+    )
+    result_comments = db.session.execute(sql, {"patch_id": id})
+    comments = result_comments.fetchall()
+
+    list_comments = []
+    for comment in comments:
+        list_comments.append((comment[0], comment[1], comment[2]))
+
+    return list_comments
+
+
 def patch_into_collection(patch_id, user_id):
     sql_set_timezone = text("SET TIME ZONE 'Europe/Helsinki';")
     db.session.execute(sql_set_timezone)
@@ -41,6 +60,23 @@ def patch_into_collection(patch_id, user_id):
     )
     db.session.execute(sql, {"patch_id": patch_id, "user_id": user_id})
     db.session.commit()
+
+
+def add_comment(patch_id, user_id, comment):
+    sql_set_timezone = text("SET TIME ZONE 'Europe/Helsinki';")
+    db.session.execute(sql_set_timezone)
+    try:
+        sql = text(
+            """INSERT INTO Comments (patch_id, user_id, comment, sent_at) 
+            VALUES (:patch_id, :user_id, :comment, NOW())"""
+        )
+        db.session.execute(
+            sql, {"patch_id": patch_id, "user_id": user_id, "comment": comment}
+        )
+        db.session.commit()
+        flash("Kommentti lisätty onnistuneesti!")
+    except:
+        flash("Kommentin lisääminen epäonnistui!")
 
 
 def delete_patch(patch_id):

@@ -82,6 +82,7 @@ def merkki(id):
     patch_name = patch_view.get_patch_name(id)
     created_by_user = patch_view.get_created_by_user(id)
     result_image = patch_view.get_image(id)
+    comments = patch_view.get_comments(id)
     try:
         data = result_image.fetchone()[0] if result_image else None
     except:
@@ -96,10 +97,15 @@ def merkki(id):
             created_by_user=created_by_user,
             id=id,
             photo=response,
+            comments=comments,
         )
 
     return render_template(
-        "merkki.html", nimi=patch_name, created_by_user=created_by_user, id=id
+        "merkki.html",
+        nimi=patch_name,
+        created_by_user=created_by_user,
+        id=id,
+        comments=comments,
     )
 
 
@@ -125,6 +131,18 @@ def delete_from_collection():
         return redirect("/kirjautunut")
     patch_view.delete_patch(patch_id)
     return redirect("/kirjautunut")
+
+
+# add comment to patch
+@app.route("/addcomment", methods=["POST"])
+def addcomment():
+    if session["csrf_token"] != request.form["csrf_token"]:
+        abort(403)
+    patch_id = request.form["id"]
+    comment = request.form["comment"]
+    user_id = users.user_id()
+    patch_view.add_comment(patch_id, user_id, comment)
+    return redirect(f"/merkki/{patch_id}#commentform")
 
 
 # adding patch to general collection for everyone to see

@@ -26,7 +26,49 @@
       </button>
     </form>
 
-    <br />
+    <hr />
+
+    {% if comments %}
+      <h5>Kommentit:</h5>
+      {% for comment, date, username in comments %}
+        <ul class="list-group margin-10vw">
+          <li class="list-group-item">
+            <b>"</b>{{ comment }}<b>"</b> <br />
+            Käyttäjältä: {{ username }} <br />
+            Lähetetty: {{ date.strftime("%Y-%m-%d %H:%M:%S") }}
+          </li>
+        </ul>
+      {% endfor %}
+    {% endif %}
+
+    <hr />
+    <form action="/addcomment" method="POST">
+      <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+      <input type="hidden" name="id" value="{{ id }}" />
+      <div id="commentform" class="form-group margin-10vw">
+        <label for="comment">Lisää kommentti:</label>
+        <textarea
+          class="form-control"
+          id="comment"
+          name="comment"
+          rows="2"
+          maxlength="1000"
+          placeholder="Kirjoita kommenttisi haalarimerkistä tähän..."
+          required
+        ></textarea>
+        <br />
+        <button type="submit" class="btn btn-primary">Lisää kommentti</button>
+      </div>
+    </form>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-success" role="alert">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
     <hr />
     <br />
     <form action="/deletepatch" method="POST">
