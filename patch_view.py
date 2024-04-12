@@ -14,13 +14,14 @@ def get_patch_name(id):
 
 def get_created_by_user(id):
     # Fetch user id of the patch
-    query_patch = text("SELECT created_by_user FROM Patches WHERE id = :id;")
-    result_patch = db.session.execute(query_patch, {"id": id})
-    row = result_patch.fetchone()
-    created_by_user = row[0]
+    sql = text(
+        """SELECT users.username 
+        FROM users, patches 
+        WHERE patches.id = :id 
+        AND patches.created_by_user = users.id"""
+    )
 
-    query_username = text("SELECT username FROM Users WHERE id = :id;")
-    created_by_user = db.session.execute(query_username, {"id": created_by_user})
+    created_by_user = db.session.execute(sql, {"id": id})
     created_by_user = created_by_user.fetchone()[0]
 
     return created_by_user
@@ -35,7 +36,7 @@ def get_image(id):
 
 
 def get_comments(id):
-    # Fetch comments of the patch 
+    # Fetch comments of the patch
     sql = text(
         """SELECT comments.comment, comments.sent_at, users.username 
         FROM comments, users 
