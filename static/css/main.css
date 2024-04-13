@@ -1,11 +1,25 @@
-.content-centered {
-    max-width: 940px;
-    margin-top: 20px;
-    margin-bottom: auto;
-    margin-left: auto;
-    margin-right: auto;
-    text-align: center;
+@media screen and (min-width: 960px) {
+    .content-centered {
+        max-width: 940px;
+        margin-top: 20px;
+        margin-bottom: auto;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+    }
 }
+
+@media screen and (max-width: 960px) {
+    .content-centered {
+        max-width: 940px;
+        margin-top: 20px;
+        margin-bottom: auto;
+        margin-left: 25px;
+        margin-right: 25px;
+        text-align: center;
+    }
+}
+
 
 .center {
     display: flex;
