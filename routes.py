@@ -172,16 +172,17 @@ def send():
                     "new_merkki.html", error="Vain .jpg ja .jpeg tiedostot sallittu"
                 )
 
+        # get user id
         userid = users.user_id()
 
-        # testing if name is already in the database
-        # return True if name is already in the database
-        if sendpatch.patchname_exists(name) is True:
-            # return error message if name is already in the database and break out of function
-            return render_template("new_merkki.html", error="Merkki on jo olemassa")
-
         # insert the patch to the database
-        sendpatch.insert_patch_into_generalcollection(name, userid)
+        try:
+            sendpatch.insert_patch_into_generalcollection(name, userid)
+        except:
+            return render_template(
+                "new_merkki.html",
+                error="Merkkiä ei voitu lisätä yhteiseen kokoelmaan, olethan varma ettei samalla nimellä ole merkkiä",
+            )
 
         # Get the id of the created patch, for inserting image.
         patch_id = sendpatch.get_patch_id(name)

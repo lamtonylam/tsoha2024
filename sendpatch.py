@@ -5,14 +5,6 @@ from PIL import ImageOps
 from io import BytesIO
 
 
-# Function to check if patchname exists before adding it into Patches which is the general collection.
-def patchname_exists(name):
-    sql = text("SELECT name FROM Patches WHERE name = :name")
-    result = db.session.execute(sql, {"name": name})
-    # If the patchname is found, return True
-    return result.fetchone() is not None
-
-
 # Function to insert a patch into the general collection
 def insert_patch_into_generalcollection(name, userid):
     sql = text("INSERT INTO Patches(name, created_by_user) VALUES (:name, :userid)")

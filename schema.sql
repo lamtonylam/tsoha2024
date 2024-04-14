@@ -12,7 +12,7 @@ CREATE TABLE Users (
 
 CREATE TABLE Patches (
     id SERIAL PRIMARY KEY, 
-    name TEXT,
+    name TEXT UNIQUE,
     created_by_user SERIAL REFERENCES Users(id)
 );
 
