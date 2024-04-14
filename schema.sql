@@ -32,7 +32,7 @@ CREATE TABLE UsersToPatches (
 CREATE TABLE Comments (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES Users(id),
-    patch_id INTEGER REFERENCES Patches(id),
+    patch_id INTEGER REFERENCES Patches(id) ON DELETE CASCADE,
     comment TEXT,
     sent_at TIMESTAMP
 );
