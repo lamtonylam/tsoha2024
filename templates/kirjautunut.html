@@ -8,6 +8,15 @@
     });
   </script>
 
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-success text-center" role="alert">
+          {{ message }}
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
   {% if session.username %}
     <p>Olet kirjautunut nimellä: <b>{{ session.username }}</b></p>
 
@@ -65,32 +74,6 @@
       <hr />
     {% endfor %}
 
-    <h4>Omat merkit:</h4>
-
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        {% for message in messages %}
-          <div class="alert alert-success text-center" role="alert">
-            {{ message }}
-          </div>
-        {% endfor %}
-      {% endif %}
-    {% endwith %}
-
-    <hr />
-    {% for result in own_patches_result %}
-      <p>Merkin nimi: <b> {{ result.name }}</b></p>
-      <p>
-        Lisätty omaan kokoelmaan:
-        <b>{{ result.sent_at.strftime("%Y-%m-%d %H:%M:%S") }}</b>
-      </p>
-      <a
-        class="btn btn-outline-primary btn-sm"
-        href="/merkki/{{ result.patch_id }}"
-        >Tietoja</a
-      >
-      <hr />
-    {% endfor %}
   {% endif %}
 
   {% if not session.username %}

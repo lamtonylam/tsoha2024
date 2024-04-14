@@ -32,6 +32,7 @@ def index():
 
     return render_template("index.html", random_text=random_text)
 
+
 # logged in page, shows all patches and user's own patches
 @app.route("/kirjautunut")
 def kirjautnut():
@@ -63,19 +64,12 @@ def kirjautnut():
         else:
             patch_images.append(None)
 
-    user_id = users.user_id()
-    query = text(
-        "SELECT Patches.name, UsersToPatches.sent_at, UsersToPatches.patch_id \
-                FROM Patches, UsersToPatches \
-                WHERE Patches.id = UsersToPatches.patch_id AND UsersToPatches.user_id = :user_id;"
-    )
-    own_patches_result = db.session.execute(query, {"user_id": user_id})
     return render_template(
         "kirjautunut.html",
         # zipping results and patch images together, so that they are together
         results=zip(results, patch_images),
-        own_patches_result=own_patches_result,
     )
+
 
 # individual patch view
 @app.route("/merkki/<int:id>")
@@ -201,6 +195,7 @@ def send():
             success="Merkki lisätty yhteiseen kokoelmaan onnistuneesti",
         )
 
+
 # registering user
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -229,6 +224,7 @@ def register():
                 "register.html", message="Rekisteröinti ei onnistunut"
             )
 
+
 # logging in user
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -243,12 +239,14 @@ def login():
         else:
             return render_template("login.html", message="Väärä tunnus tai salasana")
 
+
 # logging out user
 @app.route("/logout")
 def logout():
     users.logout()
     flash("Olet kirjautunut ulos onnistuneesti")
     return redirect("/")
+
 
 # profile page
 @app.route("/profile")
@@ -264,9 +262,21 @@ def profile():
     result = db.session.execute(query, {"user_id": user_id})
     own_patches_result = result.fetchall()
 
+    patch_images = []
+    for patch in own_patches_result:
+        patch_id = patch[2]
+        sql = text("SELECT data FROM Images WHERE patch_id = :patch_id;")
+        result = db.session.execute(sql, {"patch_id": patch_id})
+        image = result.fetchone()
+        if image:
+            image = base64.b64encode(image[0]).decode("utf-8")
+            patch_images.append(image)
+        else:
+            patch_images.append(None)
+
     return render_template(
         "profile.html",
         username=username,
-        own_patches_result=own_patches_result,
+        own_patches_result=zip(own_patches_result, patch_images),
         patch_amount=len(own_patches_result),
     )

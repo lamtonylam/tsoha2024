@@ -16,8 +16,17 @@
     <h4>Omat merkit:</h4>
 
     <hr />
-    {% for result in own_patches_result %}
+    {% for result, image in own_patches_result %}
       <p>Merkin nimi: <b> {{ result.name }}</b></p>
+      {% if image %}
+      <img
+        src="data:image/jpeg;base64,{{ image }}"
+        alt="Image for patch {{ result[1] }}"
+        style="max-width: 100px; height: auto;"
+      />
+      <br />
+      <br />
+    {% endif %}
       <p>
         Lisätty omaan kokoelmaan:
         <b>{{ result.sent_at.strftime("%Y-%m-%d %H:%M:%S") }}</b>
