@@ -17,7 +17,8 @@
 
 # Using app on the web
 **Note!** Please allow up to 10 seconds for the fly.io instance to wake up from sleep!  
-**Website uptime**: ![Uptime](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Flamtonylam%2Fupptime%2Fmaster%2Fapi%2Fhaalarimerkkidex%2Fuptime.json)  ![Uptime](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Flamtonylam%2Fupptime%2Fmaster%2Fapi%2Fhaalarimerkkidex%2Fresponse-time.json)  
+**Website uptime**: ![Uptime Robot status](https://img.shields.io/uptimerobot/status/m796740317-3cc8e5732ede56b9e8de37b3) ![Uptime Robot ratio (30 days)](https://img.shields.io/uptimerobot/ratio/m796740317-3cc8e5732ede56b9e8de37b3?label=Uptime%2030%20days)
+
   
 https://haalarimerkkidex.fly.dev/
 
