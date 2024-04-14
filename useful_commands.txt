@@ -1,0 +1,2 @@
+fly deploy
+fly postgres connect -a tsoha-haalarimerkki-db
