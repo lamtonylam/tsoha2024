@@ -253,6 +253,10 @@ def logout():
 def profile():
     username = users.get_username()
 
+    sql = text("SELECT * FROM Patches WHERE created_by_user = :user_id")
+    result = db.session.execute(sql, {"user_id": users.user_id()})
+    user_submitted_patches = result.fetchall()
+
     user_id = users.user_id()
     query = text(
         "SELECT Patches.name, UsersToPatches.sent_at, UsersToPatches.patch_id \
@@ -279,4 +283,5 @@ def profile():
         username=username,
         own_patches_result=zip(own_patches_result, patch_images),
         patch_amount=len(own_patches_result),
+        user_submitted_amount=len(user_submitted_patches),
     )

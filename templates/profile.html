@@ -7,9 +7,29 @@
   {% if session.username %}
     <p>Sinun käyttäjätunnuksesi on: <b>{{ username }}</b></p>
 
-    <p>
-      Olet lisännyt omaan kokoelmaasi: <b>{{ patch_amount }}</b> haalarimerkkiä
-    </p>
+    {% if patch_amount == 1 %}
+      <p>
+        Olet lisännyt omaan kokoelmaasi:
+        <b>{{ user_submitted_amount }}</b> haalarimerkin
+      </p>
+    {% else %}
+      <p>
+        Olet lisännyt omaan kokoelmaasi:
+        <b>{{ user_submitted_amount }}</b> haalarimerkkiä
+      </p>
+    {% endif %}
+
+    {% if user_submitted_amount == 1 %}
+      <p>
+        Olet lisännyt yhteisöön:
+        <b>{{ user_submitted_amount }}</b> haalarimerkin
+      </p>
+    {% else %}
+      <p>
+        Olet lisännyt yhteisöön:
+        <b>{{ user_submitted_amount }}</b> haalarimerkkiä
+      </p>
+    {% endif %}
 
     <br />
 
@@ -19,19 +39,19 @@
     {% for result, image in own_patches_result %}
       <p>Merkin nimi: <b> {{ result.name }}</b></p>
       {% if image %}
-      <img
-        src="data:image/jpeg;base64,{{ image }}"
-        alt="Image for patch {{ result[1] }}"
-        style="max-width: 100px; height: auto;"
-      />
-      <br />
-      <br />
-    {% endif %}
+        <img
+          src="data:image/jpeg;base64,{{ image }}"
+          alt="Image for patch {{ result[1] }}"
+          style="max-width: 100px; height: auto;"
+        />
+        <br />
+        <br />
+      {% endif %}
       <p>
         Lisätty omaan kokoelmaan:
         <b>{{ result.sent_at.strftime("%Y-%m-%d %H:%M:%S") }}</b>
       </p>
-      <a href="/merkki/{{ result.patch_id }}">Tietoja</a>
+      <a class="btn btn-primary" href="/merkki/{{ result.patch_id }}">Tietoja</a>
       <hr />
     {% endfor %}
   {% endif %}
