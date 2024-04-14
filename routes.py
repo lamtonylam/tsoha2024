@@ -1,6 +1,7 @@
 from app import app
 from flask import render_template, request, redirect
 from flask import session
+from flask import flash
 import users
 from sqlalchemy.sql import text
 from db import db
@@ -117,6 +118,7 @@ def to_collection():
     patch_id = request.form["id"]
     user_id = users.user_id()
     patch_view.patch_into_collection(patch_id, user_id)
+    flash("Merkki lisätty omaan kokoelmaan onnistuneesti")
     return redirect("/kirjautunut")
 
 
@@ -130,6 +132,7 @@ def delete_from_collection():
     if masterpassword != getenv("master_key"):
         return redirect("/kirjautunut")
     patch_view.delete_patch(patch_id)
+    flash("Merkki poistettu onnistuneesti")
     return redirect("/kirjautunut")
 
 
@@ -218,7 +221,8 @@ def register():
                 "register.html", message="Salasanan tulee olla 8-20 merkkiä pitkä"
             )
         if users.register(username, password1):
-            return render_template("index.html", message="Rekisteröinti onnistui")
+            flash("Rekisteröinti onnistui")
+            return redirect("/")
         else:
             return render_template(
                 "register.html", message="Rekisteröinti ei onnistunut"
@@ -233,6 +237,7 @@ def login():
         username = request.form["username"]
         password = request.form["password"]
         if users.login(username, password):
+            flash("Kirjautuminen onnistui")
             return redirect("/")
         else:
             return render_template("login.html", message="Väärä tunnus tai salasana")
@@ -241,6 +246,7 @@ def login():
 @app.route("/logout")
 def logout():
     users.logout()
+    flash("Olet kirjautunut ulos onnistuneesti")
     return redirect("/")
 
 

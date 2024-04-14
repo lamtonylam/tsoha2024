@@ -22,12 +22,16 @@
     </div>
   {% endif %}
 
-  <!-- display success message upon successful login/registration -->
-  {% if message %}
-    <div class="alert alert-success text-center" role="alert">
-      {{ message }}
-    </div>
-  {% endif %}
+  <br />
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-success text-center" role="alert">
+          {{ message }}
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
 
   <!-- if user has logged on, display this block  -->
   {% if session.username %}

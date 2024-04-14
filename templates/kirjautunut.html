@@ -67,6 +67,16 @@
 
     <h4>Omat merkit:</h4>
 
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-success text-center" role="alert">
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
     <hr />
     {% for result in own_patches_result %}
       <p>Merkin nimi: <b> {{ result.name }}</b></p>
