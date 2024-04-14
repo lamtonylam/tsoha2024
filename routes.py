@@ -32,7 +32,7 @@ def index():
 
     return render_template("index.html", random_text=random_text)
 
-
+# logged in page, shows all patches and user's own patches
 @app.route("/kirjautunut")
 def kirjautnut():
     # if user is not logged in dont run sqls etc.
@@ -72,11 +72,12 @@ def kirjautnut():
     own_patches_result = db.session.execute(query, {"user_id": user_id})
     return render_template(
         "kirjautunut.html",
+        # zipping results and patch images together, so that they are together
         results=zip(results, patch_images),
         own_patches_result=own_patches_result,
     )
 
-
+# individual patch view
 @app.route("/merkki/<int:id>")
 def merkki(id):
     # Fetch patch name and user id of the patch
@@ -200,7 +201,7 @@ def send():
             success="Merkki lisätty yhteiseen kokoelmaan onnistuneesti",
         )
 
-
+# registering user
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "GET":
@@ -228,7 +229,7 @@ def register():
                 "register.html", message="Rekisteröinti ei onnistunut"
             )
 
-
+# logging in user
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "GET":
@@ -242,14 +243,14 @@ def login():
         else:
             return render_template("login.html", message="Väärä tunnus tai salasana")
 
-
+# logging out user
 @app.route("/logout")
 def logout():
     users.logout()
     flash("Olet kirjautunut ulos onnistuneesti")
     return redirect("/")
 
-
+# profile page
 @app.route("/profile")
 def profile():
     username = users.get_username()
