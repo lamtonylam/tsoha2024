@@ -84,6 +84,8 @@ def merkki(id):
     except:
         data = None
 
+    logged_in_username = users.get_username()
+
     # If image data is found, encode it to base64 and pass it to the template
     if data is not None:
         response = base64.b64encode(data).decode("utf-8")
@@ -102,6 +104,7 @@ def merkki(id):
         created_by_user=created_by_user,
         id=id,
         comments=comments,
+        logged_in_username=logged_in_username,
     )
 
 
@@ -123,9 +126,15 @@ def delete_from_collection():
     if session["csrf_token"] != request.form["csrf_token"]:
         abort(403)
     patch_id = request.form["id"]
-    masterpassword = request.form["masterpassword"]
-    if masterpassword != getenv("master_key"):
-        return redirect("/kirjautunut")
+    patch_creator = patch_view.get_created_by_user(patch_id)
+    logged_in_username = users.get_username()
+    # if not the creator of the patch, ask for master password
+    if logged_in_username != patch_creator:
+        # check if master password is correct
+        masterpassword = request.form["masterpassword"]
+        # get master password from environment variable and check if it matches
+        if masterpassword != getenv("master_key"):
+            return redirect("/kirjautunut")
     patch_view.delete_patch(patch_id)
     flash("Merkki poistettu onnistuneesti")
     return redirect("/kirjautunut")

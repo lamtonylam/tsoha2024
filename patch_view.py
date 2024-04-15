@@ -13,7 +13,7 @@ def get_patch_name(id):
 
 
 def get_created_by_user(id):
-    # Fetch user id of the patch
+    # Fetch username of the patch
     sql = text(
         """SELECT users.username 
         FROM users, patches 
