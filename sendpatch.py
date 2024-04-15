@@ -4,23 +4,8 @@ from PIL import Image
 from PIL import ImageOps
 from io import BytesIO
 
-
 # Function to insert a patch into the general collection
-def insert_patch_into_generalcollection(name, userid):
-    sql = text("INSERT INTO Patches(name, created_by_user) VALUES (:name, :userid)")
-    db.session.execute(sql, {"name": name, "userid": userid})
-    db.session.commit()
-
-
-# Function to get the id of a patch by its name
-def get_patch_id(name):
-    query = text("SELECT id FROM Patches WHERE name = :name")
-    result = db.session.execute(query, {"name": name})
-    return result.fetchone()[0]
-
-
-# Function to insert an image into the database
-def insert_image(file, patch_id):
+def insert_patch_into_generalcollection(name, userid, file):
     # Read image data
     image_data = file.read()
     image = Image.open(BytesIO(image_data))
@@ -34,8 +19,13 @@ def insert_image(file, patch_id):
     # Compress the image to 60% quality
     image.save(output, format="JPEG", quality=80)
     data = output.getvalue()
-    # Insert the compressed and resized image into the database
-    sql = text("INSERT INTO Images(patch_id, data) VALUES (:patch_id, :data)")
-    db.session.execute(sql, {"patch_id": patch_id, "data": data})
+
+    sql = text("INSERT INTO Patches(name, created_by_user, data) VALUES (:name, :userid, :data)")
+    db.session.execute(sql, {"name": name, "userid": userid, "data": data})
     db.session.commit()
-    print("kuva lisätty")
+
+# Function to get the id of a patch by its name
+def get_patch_id(name):
+    query = text("SELECT id FROM Patches WHERE name = :name")
+    result = db.session.execute(query, {"name": name})
+    return result.fetchone()[0]

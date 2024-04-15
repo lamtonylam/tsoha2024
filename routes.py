@@ -47,26 +47,23 @@ def kirjautnut():
     # sort patches by id, default is ascending, can be changed by adding ?sort to the url
     sort_order = request.args.get("sort")
     if sort_order == "asc":
-        query = text("SELECT id, name FROM Patches ORDER BY id ASC;")
+        query = text("SELECT id, name, data FROM Patches ORDER BY id ASC;")
     elif sort_order == "desc":
-        query = text("SELECT id, name FROM Patches ORDER BY id DESC;")
+        query = text("SELECT id, name, data FROM Patches ORDER BY id DESC;")
     else:
-        query = text("SELECT id, name FROM Patches ORDER BY id ASC;")
+        query = text("SELECT id, name, data FROM Patches ORDER BY id ASC;")
     result = db.session.execute(query)
     results = result.fetchall()
 
     # Fetch image data for each patch, encode it to base64 and pass it to the template
     patch_images = []
     for patch in results:
-        patch_id = patch[0]
-        sql = text("SELECT data FROM Images WHERE patch_id = :patch_id;")
-        result = db.session.execute(sql, {"patch_id": patch_id})
-        image = result.fetchone()
+        image = patch[2]
         if image:
-            image = base64.b64encode(image[0]).decode("utf-8")
-            patch_images.append(image)
+            image = base64.b64encode(image).decode("utf-8")
         else:
-            patch_images.append(None)
+            image = None
+        patch_images.append(image)
 
     return render_template(
         "kirjautunut.html",
@@ -83,9 +80,9 @@ def merkki(id):
     created_by_user = patch_view.get_created_by_user(id)
     result_image = patch_view.get_image(id)
     comments = patch_view.get_comments(id)
-    
+
     # Check if user is using a mobile device
-    user_agent = request.headers.get('User-Agent')
+    user_agent = request.headers.get("User-Agent")
     print(user_agent)
     is_mobile = "Mobile" in user_agent
     print(is_mobile)
@@ -108,7 +105,7 @@ def merkki(id):
         output_value = output.getvalue()
         encoded_output = base64.b64encode(output_value)
         encoded_img = encoded_output.decode("utf-8")
-    
+
         return render_template(
             "merkki.html",
             nimi=patch_name,
@@ -116,7 +113,7 @@ def merkki(id):
             id=id,
             photo=encoded_img,
             comments=comments,
-            is_mobile=is_mobile
+            is_mobile=is_mobile,
         )
 
     return render_template(
@@ -126,7 +123,7 @@ def merkki(id):
         id=id,
         comments=comments,
         logged_in_username=logged_in_username,
-        is_mobile=is_mobile
+        is_mobile=is_mobile,
     )
 
 
@@ -206,19 +203,13 @@ def send():
 
         # insert the patch to the database
         try:
-            sendpatch.insert_patch_into_generalcollection(name, userid)
-        except:
+            sendpatch.insert_patch_into_generalcollection(name, userid, file)
+        except Exception as e:
+            print(e)
             return render_template(
                 "new_merkki.html",
                 error="Merkkiä ei voitu lisätä yhteiseen kokoelmaan, olethan varma ettei samalla nimellä ole merkkiä",
             )
-
-        # Get the id of the created patch, for inserting image.
-        patch_id = sendpatch.get_patch_id(name)
-
-        if file:
-            # insert image to database
-            sendpatch.insert_image(file, patch_id)
 
         # if all is okay return kirjautunut page
         return render_template(
@@ -290,7 +281,7 @@ def profile():
 
     user_id = users.user_id()
     query = text(
-        "SELECT Patches.name, UsersToPatches.sent_at, UsersToPatches.patch_id \
+        "SELECT Patches.name, UsersToPatches.sent_at, UsersToPatches.patch_id, Patches.data \
                 FROM Patches, UsersToPatches \
                 WHERE Patches.id = UsersToPatches.patch_id AND UsersToPatches.user_id = :user_id;"
     )
@@ -299,12 +290,9 @@ def profile():
 
     patch_images = []
     for patch in own_patches_result:
-        patch_id = patch[2]
-        sql = text("SELECT data FROM Images WHERE patch_id = :patch_id;")
-        result = db.session.execute(sql, {"patch_id": patch_id})
-        image = result.fetchone()
+        image = patch[3]
         if image:
-            image = base64.b64encode(image[0]).decode("utf-8")
+            image = base64.b64encode(image).decode("utf-8")
             patch_images.append(image)
         else:
             patch_images.append(None)

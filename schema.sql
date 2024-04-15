@@ -13,12 +13,7 @@ CREATE TABLE Users (
 CREATE TABLE Patches (
     id SERIAL PRIMARY KEY, 
     name TEXT UNIQUE,
-    created_by_user SERIAL REFERENCES Users(id)
-);
-
-CREATE TABLE Images (
-    id SERIAL PRIMARY KEY,
-    patch_id INTEGER REFERENCES Patches(id) ON DELETE CASCADE,
+    created_by_user SERIAL REFERENCES Users(id),
     data BYTEA
 );
 

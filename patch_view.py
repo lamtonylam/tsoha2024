@@ -29,7 +29,7 @@ def get_created_by_user(id):
 
 def get_image(id):
     # Fetch image data
-    query_image = text("SELECT data FROM images WHERE patch_id=:patch_id")
+    query_image = text("SELECT data FROM Patches WHERE id=:patch_id")
     result_image = db.session.execute(query_image, {"patch_id": id})
 
     return result_image
