@@ -21,7 +21,7 @@ import sendpatch
 import patch_view
 
 from PIL import Image
-import io
+from io import BytesIO
 import base64
 
 
@@ -99,14 +99,16 @@ def merkki(id):
 
     # If image data is found, upscale it and encode it to base64
     if data is not None:
-        img = Image.open(io.BytesIO(data))
+        img = Image.open(BytesIO(data))
 
         upscaled_img = img.resize((img.width * 3, img.height * 3), Image.BICUBIC)
 
-        byte_arr = io.BytesIO()
-        upscaled_img.save(byte_arr, format="JPEG")
-        encoded_img = base64.b64encode(byte_arr.getvalue()).decode("utf-8")
-
+        output = BytesIO()
+        upscaled_img.save(output, format="JPEG")
+        output_value = output.getvalue()
+        encoded_output = base64.b64encode(output_value)
+        encoded_img = encoded_output.decode("utf-8")
+    
         return render_template(
             "merkki.html",
             nimi=patch_name,
