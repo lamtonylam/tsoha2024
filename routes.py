@@ -20,6 +20,10 @@ import sendpatch
 # module for patch_view individual patch
 import patch_view
 
+from PIL import Image
+import io
+import base64
+
 
 @app.route("/")
 def index():
@@ -79,6 +83,13 @@ def merkki(id):
     created_by_user = patch_view.get_created_by_user(id)
     result_image = patch_view.get_image(id)
     comments = patch_view.get_comments(id)
+    
+    # Check if user is using a mobile device
+    user_agent = request.headers.get('User-Agent')
+    print(user_agent)
+    is_mobile = "Mobile" in user_agent
+    print(is_mobile)
+
     try:
         data = result_image.fetchone()[0] if result_image else None
     except:
@@ -86,16 +97,24 @@ def merkki(id):
 
     logged_in_username = users.get_username()
 
-    # If image data is found, encode it to base64 and pass it to the template
+    # If image data is found, upscale it and encode it to base64
     if data is not None:
-        response = base64.b64encode(data).decode("utf-8")
+        img = Image.open(io.BytesIO(data))
+
+        upscaled_img = img.resize((img.width * 3, img.height * 3), Image.BICUBIC)
+
+        byte_arr = io.BytesIO()
+        upscaled_img.save(byte_arr, format="JPEG")
+        encoded_img = base64.b64encode(byte_arr.getvalue()).decode("utf-8")
+
         return render_template(
             "merkki.html",
             nimi=patch_name,
             created_by_user=created_by_user,
             id=id,
-            photo=response,
+            photo=encoded_img,
             comments=comments,
+            is_mobile=is_mobile
         )
 
     return render_template(
@@ -105,6 +124,7 @@ def merkki(id):
         id=id,
         comments=comments,
         logged_in_username=logged_in_username,
+        is_mobile=is_mobile
     )
 
 

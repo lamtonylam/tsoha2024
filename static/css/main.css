@@ -66,3 +66,8 @@
     }
 
 }
+
+.image-responsive {
+    max-width: 25%;
+    height: auto;
+}

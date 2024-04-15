@@ -3,7 +3,14 @@
 {% block title %}Merkki{% endblock %}
 
 {% block content %}
-
+  <script>
+    window.onload = function () {
+      mediumZoom('img[alt="Patch Image"]', {
+        margin: 0,
+        background: "rgba(0, 0, 0, .8)",
+      });
+    };
+  </script>
   {% if session.username %}
     <p>Merkin nimi: <b>{{ nimi }}</b></p>
 
@@ -12,9 +19,16 @@
     <!-- display image if photo is not None -->
     {% if photo %}
       <p>Kuva haalarimerkistä:</p>
-      <img src="data:image/jpeg;base64,{{ photo }}" alt="Patch Image" />
-    {% endif %}
 
+      <img
+        src="data:image/jpeg;base64,{{ photo }}"
+        class="image-responsive"
+        alt="Patch Image"
+      />
+      {% if is_mobile %}
+        <p>Zoomaa kuvaa painamalla siitä</p>
+      {% endif %}
+    {% endif %}
     <br />
     <br />
 
