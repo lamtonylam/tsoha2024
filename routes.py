@@ -46,14 +46,25 @@ def kirjautnut():
 
     # sort patches by id, default is ascending, can be changed by adding ?sort to the url
     sort_order = request.args.get("sort")
+    search_argument = request.args.get("query")
     if sort_order == "asc":
         query = text("SELECT id, name, data FROM Patches ORDER BY id ASC;")
+        result = db.session.execute(query)
+        results = result.fetchall()
     elif sort_order == "desc":
         query = text("SELECT id, name, data FROM Patches ORDER BY id DESC;")
+        result = db.session.execute(query)
+        results = result.fetchall()
+    # search function query
+    elif search_argument:
+        query = text("SELECT id, name, data FROM Patches WHERE name LIKE LOWER(:query)")
+        result = db.session.execute(query, {"query":"%"+search_argument+"%"})
+        results = result.fetchall()
     else:
         query = text("SELECT id, name, data FROM Patches ORDER BY id ASC;")
-    result = db.session.execute(query)
-    results = result.fetchall()
+        result = db.session.execute(query)
+        results = result.fetchall()
+
 
     # Fetch image data for each patch, encode it to base64 and pass it to the template
     patch_images = []

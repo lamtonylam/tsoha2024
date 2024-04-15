@@ -55,6 +55,12 @@
       {% endif %}
     </div>
 
+    <form action="/kirjautunut" method="GET" >
+      Hakusana: <input type="text" name="query" class="form-control" />
+      <br />
+      <input type="submit" value="Lähetä" class="btn btn-primary" />
+    </form>
+
     <hr />
     {% for result, image in results %}
       <p>Merkin nimi: <b>{{ result.name }}</b></p>
@@ -73,7 +79,6 @@
 
       <hr />
     {% endfor %}
-
   {% endif %}
 
   {% if not session.username %}
