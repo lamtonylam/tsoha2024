@@ -99,6 +99,14 @@
 }
 
 /* form box placeholder center */
-input{
-    text-align:center;
+input {
+    text-align: center;
+}
+
+/* kirjautunut thumbnail */
+@media screen and (min-width: 600px) {
+    .image-thumbnail-kirjautunut {
+        max-width: 100px; 
+        height: auto;
+    }
 }
