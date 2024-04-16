@@ -1,3 +1,4 @@
+/* Content centering for the main content of the page */
 @media screen and (min-width: 960px) {
     .content-centered {
         max-width: 940px;
@@ -21,17 +22,20 @@
 }
 
 
+/* Centering */
 .center {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
+/* Margin 10vw from edges of the screen */
 .margin-10vw {
     margin-left: 10vw;
     margin-right: 10vw;
 }
 
+/* google fonts */
 .material-icons.md-18 {
     font-size: 18px;
 }
@@ -48,6 +52,7 @@
     font-size: 48px;
 }
 
+/* navbar sizing */
 @media screen and (min-width: 1000px) {
     .container-nav {
         background-color: #f8f9fa;
@@ -67,7 +72,18 @@
 
 }
 
-.image-responsive {
-    max-width: 25%;
-    height: auto;
+/* Patch view image sizing */
+@media screen and (max-width: 600px) {
+    .image-responsive {
+        max-width: 60vw;
+        height: auto;
+    }
+}
+
+@media screen and (min-width: 600px) {
+    .image-responsive {
+        max-width: 25vw;
+        max-height: 25vw;
+        height: auto;
+    }
 }
