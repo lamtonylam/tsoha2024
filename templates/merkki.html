@@ -3,14 +3,6 @@
 {% block title %}Merkki{% endblock %}
 
 {% block content %}
-  <script>
-    window.onload = function () {
-      mediumZoom('img[alt="Patch Image"]', {
-        margin: 0,
-        background: "rgba(0, 0, 0, .8)",
-      });
-    };
-  </script>
   {% if session.username %}
     <p>Merkin nimi: <b>{{ nimi }}</b></p>
 

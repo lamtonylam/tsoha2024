@@ -2,12 +2,6 @@
 {% block title %}Merkit{% endblock %}
 
 {% block content %}
-  <script>
-    $(function () {
-      $('[data-toggle="tooltip"]').tooltip();
-    });
-  </script>
-
   {% with messages = get_flashed_messages() %}
     {% if messages %}
       {% for message in messages %}
@@ -74,7 +68,7 @@
         <img
           src="data:image/jpeg;base64,{{ image }}"
           alt="Image for patch {{ result[1] }}"
-        />
+         />
         <br />
         <br />
       {% endif %}
