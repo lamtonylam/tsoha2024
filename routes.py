@@ -47,6 +47,12 @@ def kirjautnut():
     # sort patches by id, default is ascending, can be changed by adding ?sort to the url
     sort_order = request.args.get("sort")
     search_argument = request.args.get("query")
+    # check if search argument is too long
+    try:
+        if len(search_argument) > 100:
+            return redirect("/kirjautunut")
+    except:
+        pass
     if sort_order == "asc":
         query = text("SELECT id, name, data FROM Patches ORDER BY id ASC;")
         result = db.session.execute(query)
