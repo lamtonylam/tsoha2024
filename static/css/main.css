@@ -87,3 +87,8 @@
         height: auto;
     }
 }
+
+/* form box placeholder center */
+input{
+    text-align:center;
+}
