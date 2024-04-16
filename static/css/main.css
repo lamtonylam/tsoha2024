@@ -88,6 +88,16 @@
     }
 }
 
+/* Form box width */
+@media screen and (min-width: 600px) {
+    .form-box {
+        width: 60%;
+        justify-content: center;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
 /* form box placeholder center */
 input{
     text-align:center;

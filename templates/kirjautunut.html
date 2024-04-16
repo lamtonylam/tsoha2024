@@ -55,8 +55,14 @@
       {% endif %}
     </div>
 
-    <form action="/kirjautunut" method="GET" >
-      Hakusana: <input type="text" name="query" class="form-control" />
+    <form action="/kirjautunut" method="GET">
+      Hae haalarimerkkejä:
+      <input
+        type="text"
+        name="query"
+        class="form-control form-box"
+        placeholder="Hakusana:"
+      />
       <br />
       <input type="submit" value="Lähetä" class="btn btn-primary" />
     </form>
