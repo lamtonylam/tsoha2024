@@ -212,15 +212,26 @@ def send():
         # get user id
         userid = users.user_id()
 
-        # insert the patch to the database
-        try:
-            sendpatch.insert_patch_into_generalcollection(name, userid, file)
-        except Exception as e:
-            print(e)
-            return render_template(
-                "new_merkki.html",
-                error="Merkkiä ei voitu lisätä yhteiseen kokoelmaan, olethan varma ettei samalla nimellä ole merkkiä",
-            )
+        # if file is empty, insert patch without image
+        if not file:
+            try:
+                sendpatch.insert_patch_into_generalcollection_without_image(name, userid)
+            except:
+                return render_template(
+                    "new_merkki.html",
+                    error="Virhe tapahtui, voi olla että merkin nimi on jo olemassa",
+                )
+        else:
+            try:
+                sendpatch.insert_patch_into_generalcollection(name, userid, file)
+            except:
+                return render_template(
+                    "new_merkki.html",
+                    error="Virhe tapahtui, voi olla että merkin nimi on jo olemassa",
+                )
+
+
+
 
         # if all is okay return kirjautunut page
         return render_template(
