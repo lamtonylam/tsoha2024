@@ -48,5 +48,5 @@ VALUES
     ('Sitsit 😋🍔🍷'),
     ('Approt 🍻🍹'),
     ('Ainejärjestömerkit ❤️'),
-    ('Sponsorimerkit 💸');
+    ('Sponsorimerkit 💸'),
     ('Muut 🤔');
