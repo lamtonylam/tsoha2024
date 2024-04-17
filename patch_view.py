@@ -53,6 +53,15 @@ def get_comments(id):
     return list_comments
 
 
+def get_category(id):
+    sql = text(
+        "SELECT Categories.name FROM Categories, Patches WHERE Patches.category_id = Categories.id AND Patches.id = :id"
+    )
+    result = db.session.execute(sql, {"id": id})
+    category = result.fetchone()[0]
+    return category
+
+
 def patch_into_collection(patch_id, user_id):
     sql_set_timezone = text("SET TIME ZONE 'Europe/Helsinki';")
     db.session.execute(sql_set_timezone)

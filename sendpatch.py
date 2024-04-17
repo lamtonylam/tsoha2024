@@ -4,8 +4,9 @@ from PIL import Image
 from PIL import ImageOps
 from io import BytesIO
 
+
 # Function to insert a patch into the general collection
-def insert_patch_into_generalcollection(name, userid, file=None):
+def insert_patch_into_generalcollection(name, userid, category, file=None):
     if file:
         # Read image data
         image_data = file.read()
@@ -22,12 +23,16 @@ def insert_patch_into_generalcollection(name, userid, file=None):
         data = output.getvalue()
 
         sql = text(
-            "INSERT INTO Patches(name, created_by_user, data) VALUES (:name, :userid, :data)"
+            "INSERT INTO Patches(name, created_by_user, data, category_id) VALUES (:name, :userid, :data, :category)"
         )
-        db.session.execute(sql, {"name": name, "userid": userid, "data": data})
+        db.session.execute(
+            sql, {"name": name, "userid": userid, "data": data, "category": category}
+        )
     else:
-        sql = text("INSERT INTO Patches(name, created_by_user) VALUES (:name, :userid)")
-        db.session.execute(sql, {"name": name, "userid": userid})
+        sql = text(
+            "INSERT INTO Patches(name, created_by_user, category_id) VALUES (:name, :userid, :category)"
+        )
+        db.session.execute(sql, {"name": name, "userid": userid, "category": category})
 
     db.session.commit()
 
@@ -37,3 +42,11 @@ def get_patch_id(name):
     query = text("SELECT id FROM Patches WHERE name = :name")
     result = db.session.execute(query, {"name": name})
     return result.fetchone()[0]
+
+
+# Get categories
+def get_categories():
+    sql = text("SELECT id, name FROM Categories")
+    result = db.session.execute(sql)
+    categories = result.fetchall()
+    return categories

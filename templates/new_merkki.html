@@ -18,32 +18,54 @@
 
     <form action="/new/merkki" method="POST" enctype="multipart/form-data">
       <br />
-      <p>Lisää uusi haalarimerkki:</p>
-      <div class="center">
-        <div class="form-box">
-          <input
-            type="text"
-            class="form-control"
-            id="nimi"
-            name="nimi"
-            placeholder="Haalarimerkin nimi:"
-            required
-            maxlength="100"
-          />
+      <div class="form-group">
+        <p><b>Lisää uusi haalarimerkki:</b></p>
+        <div class="center">
+          <div class="form-box">
+            <input
+              type="text"
+              class="form-control"
+              id="nimi"
+              name="nimi"
+              placeholder="Haalarimerkin nimi:"
+              required
+              maxlength="100"
+            />
+          </div>
         </div>
       </div>
+      <div class="form-group">
+        <p><b>Kategoria:</b></p>
+        {% for category in categories %}
+          <div class="custom-control custom-radio">
+            <input
+              id="{{ category.name }}"
+              value="{{ category.id }}"
+              type="radio"
+              name="category"
+              class="custom-control-input"
+              required
+            />
+            <label class="custom-control-label" for="{{ category.name }}">
+              {{ category.name }}
+            </label>
+          </div>
+        {% endfor %}
+      </div>
+      <div class="form-group">
+        <p><b>Lisää kuva:</b></p>
+        <p>Kuvan pitää olla .jpg tai .jpeg muodossa</p>
+        <input
+          type="file"
+          for="formFile"
+          class="form-label"
+          id="file"
+          name="file"
+          accept=".jpeg,.jpg"
+        />
+      </div>
       <br />
-      <p>Lisää kuva:</p>
-      <p>Kuvan pitää olla .jpg tai .jpeg muodossa</p>
-      <input
-        type="file"
-        for="formFile"
-        class="form-label"
-        id="file"
-        name="file"
-        accept=".jpeg,.jpg"
-      />
-      <br />
+
       <br />
       <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
       <input type="submit" class="btn btn-primary" value="Lähetä" />

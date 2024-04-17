@@ -96,6 +96,7 @@ def merkki(id):
     created_by_user = patch_view.get_created_by_user(id)
     result_image = patch_view.get_image(id)
     comments = patch_view.get_comments(id)
+    category = patch_view.get_category(id)
 
     # Check if user is using a mobile device
     user_agent = request.headers.get("User-Agent")
@@ -130,6 +131,7 @@ def merkki(id):
             photo=encoded_img,
             comments=comments,
             is_mobile=is_mobile,
+            category=category,
         )
 
     return render_template(
@@ -140,6 +142,7 @@ def merkki(id):
         comments=comments,
         logged_in_username=logged_in_username,
         is_mobile=is_mobile,
+        category=category,
     )
 
 
@@ -191,9 +194,11 @@ def addcomment():
 @app.route("/new/merkki", methods=["GET", "POST"])
 def send():
     if request.method == "GET":
-        return render_template("new_merkki.html")
+        categories = sendpatch.get_categories()
+        return render_template("new_merkki.html", categories=categories)
     elif request.method == "POST":
         name = request.form.get("nimi")
+        category = request.form.get("category")
         if len(name) > 100:
             return render_template(
                 "new_merkki.html", error="Merkin nimi on liian pitkä, max 100 merkkiä"
@@ -206,6 +211,12 @@ def send():
 
         if session["csrf_token"] != request.form["csrf_token"]:
             abort(403)
+
+        if len(category) == 0:
+            return render_template(
+                "new_merkki.html",
+                error="Kategoria ei voi olla tyhjä, valitse kategoria",
+            )
 
         # get file from html form
         file = request.files.get("file")
@@ -225,9 +236,7 @@ def send():
         # if file is empty, insert patch without image
         if not file:
             try:
-                sendpatch.insert_patch_into_generalcollection(
-                    name, userid
-                )
+                sendpatch.insert_patch_into_generalcollection(name, userid, category)
             except:
                 return render_template(
                     "new_merkki.html",
@@ -235,7 +244,9 @@ def send():
                 )
         else:
             try:
-                sendpatch.insert_patch_into_generalcollection(name, userid, file)
+                sendpatch.insert_patch_into_generalcollection(
+                    name, userid, category, file
+                )
             except:
                 return render_template(
                     "new_merkki.html",
@@ -243,9 +254,11 @@ def send():
                 )
 
         # if all is okay return kirjautunut page
+        categories = sendpatch.get_categories()
         return render_template(
             "new_merkki.html",
             success="Merkki lisätty yhteiseen kokoelmaan onnistuneesti",
+            categories=categories,
         )
 
 
