@@ -64,13 +64,12 @@ def kirjautnut():
     # search function query
     elif search_argument:
         query = text("SELECT id, name, data FROM Patches WHERE name LIKE LOWER(:query)")
-        result = db.session.execute(query, {"query":"%"+search_argument+"%"})
+        result = db.session.execute(query, {"query": "%" + search_argument + "%"})
         results = result.fetchall()
     else:
         query = text("SELECT id, name, data FROM Patches ORDER BY id ASC;")
         result = db.session.execute(query)
         results = result.fetchall()
-
 
     # Fetch image data for each patch, encode it to base64 and pass it to the template
     patch_images = []
@@ -200,6 +199,11 @@ def send():
                 "new_merkki.html", error="Merkin nimi on liian pitkä, max 100 merkkiä"
             )
 
+        if len(name) == 0:
+            return render_template(
+                "new_merkki.html", error="Merkin nimi ei voi olla tyhjä"
+            )
+
         if session["csrf_token"] != request.form["csrf_token"]:
             abort(403)
 
@@ -221,7 +225,9 @@ def send():
         # if file is empty, insert patch without image
         if not file:
             try:
-                sendpatch.insert_patch_into_generalcollection_without_image(name, userid)
+                sendpatch.insert_patch_into_generalcollection_without_image(
+                    name, userid
+                )
             except:
                 return render_template(
                     "new_merkki.html",
@@ -235,9 +241,6 @@ def send():
                     "new_merkki.html",
                     error="Virhe tapahtui, voi olla että merkin nimi on jo olemassa",
                 )
-
-
-
 
         # if all is okay return kirjautunut page
         return render_template(
