@@ -111,10 +111,26 @@ input {
     }
 }
 
+/* kirjautnut thumbnail mobile */
+@media screen and (max-width: 600px) {
+    .image-thumbnail-kirjautunut {
+        max-width: 20vw; 
+        height: auto;
+    }
+}
+
 /* profile page thumbnail */
 @media screen and (min-width: 600px) {
     .image-thumbnail-profile {
         max-width: 150px; 
+        height: auto;
+    }
+}
+
+/* profile page thumbnail mobile */
+@media screen and (max-width: 600px) {
+    .image-thumbnail-profile {
+        max-width: 20vw; 
         height: auto;
     }
 }
