@@ -110,3 +110,11 @@ input {
         height: auto;
     }
 }
+
+/* profile page thumbnail */
+@media screen and (min-width: 600px) {
+    .image-thumbnail-profile {
+        max-width: 150px; 
+        height: auto;
+    }
+}
