@@ -225,7 +225,7 @@ def send():
         # if file is empty, insert patch without image
         if not file:
             try:
-                sendpatch.insert_patch_into_generalcollection_without_image(
+                sendpatch.insert_patch_into_generalcollection(
                     name, userid
                 )
             except:

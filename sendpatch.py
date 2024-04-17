@@ -5,31 +5,32 @@ from PIL import ImageOps
 from io import BytesIO
 
 # Function to insert a patch into the general collection
-def insert_patch_into_generalcollection(name, userid, file):
-    # Read image data
-    image_data = file.read()
-    image = Image.open(BytesIO(image_data))
+def insert_patch_into_generalcollection(name, userid, file=None):
+    if file:
+        # Read image data
+        image_data = file.read()
+        image = Image.open(BytesIO(image_data))
 
-    # Rotate the image based on EXIF data
-    image = ImageOps.exif_transpose(image)
+        # Rotate the image based on EXIF data
+        image = ImageOps.exif_transpose(image)
 
-    # Resize to 200 x 200
-    image.thumbnail((400, 400))
-    output = BytesIO()
-    # Compress the image to 60% quality
-    image.save(output, format="JPEG", quality=80)
-    data = output.getvalue()
+        # Resize to 200 x 200
+        image.thumbnail((400, 400))
+        output = BytesIO()
+        # Compress the image to 60% quality
+        image.save(output, format="JPEG", quality=80)
+        data = output.getvalue()
 
-    sql = text("INSERT INTO Patches(name, created_by_user, data) VALUES (:name, :userid, :data)")
-    db.session.execute(sql, {"name": name, "userid": userid, "data": data})
+        sql = text(
+            "INSERT INTO Patches(name, created_by_user, data) VALUES (:name, :userid, :data)"
+        )
+        db.session.execute(sql, {"name": name, "userid": userid, "data": data})
+    else:
+        sql = text("INSERT INTO Patches(name, created_by_user) VALUES (:name, :userid)")
+        db.session.execute(sql, {"name": name, "userid": userid})
+
     db.session.commit()
-    
-    
-# Function to insert a patch into the general collection
-def insert_patch_into_generalcollection_without_image(name, userid):
-    sql = text("INSERT INTO Patches(name, created_by_user) VALUES (:name, :userid)")
-    db.session.execute(sql, {"name": name, "userid": userid})
-    db.session.commit()
+
 
 # Function to get the id of a patch by its name
 def get_patch_id(name):
