@@ -4,37 +4,46 @@
 
 {% block content %}
   {% if session.username %}
-    <p>Merkin nimi: <b>{{ nimi }}</b></p>
-    <p>Kategoria: <b>{{ category }}</b></p>
-    <p>Merkin lisännyt käyttäjä: <b>{{ created_by_user }}</b></p>
-
-    <!-- display image if photo is not None -->
-    {% if photo %}
-      <p>Kuva haalarimerkistä:</p>
-
-      <img
-        src="data:image/jpeg;base64,{{ photo }}"
-        class="image-responsive"
-        alt="Patch Image"
-      />
-      {% if is_mobile %}
-        <p>Zoomaa kuvaa painamalla siitä</p>
-      {% endif %}
-    {% endif %}
+    <div class="container">
+      <div class="row custom-row">
+        <!-- tekstit vasemmalle -->
+        <div class="col-sm col-custom">
+          <p>Merkin nimi: <b>{{ nimi }}</b></p>
+          <p>Kategoria: <b>{{ category }}</b></p>
+          <p>Merkin lisännyt käyttäjä: <b>{{ created_by_user }}</b></p>
+          <br />
+          <form action="/send/new/to_collection" method="POST">
+            <input type="hidden" name="id" value="{{ id }}" />
+            <input
+              type="hidden"
+              name="csrf_token"
+              value="{{ session.csrf_token }}"
+            />
+            <button type="submit" class="btn btn-primary">
+              Lisää merkki kokoelmaasi
+            </button>
+          </form>
+					<div class="spacing-mobile"></div>
+        </div>
+        <!-- kuva oikealle -->
+        <div class="col-sm col-custom">
+          {% if photo %}
+            <img
+              src="data:image/jpeg;base64,{{ photo }}"
+              class="image-thumbnail-merkki"
+              alt="Patch Image"
+            />
+            {% if is_mobile %}
+              <p>Zoomaa kuvaa painamalla siitä</p>
+            {% endif %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
     <br />
-    <br />
-
-    <form action="/send/new/to_collection" method="POST">
-      <input type="hidden" name="id" value="{{ id }}" />
-      <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
-      <button type="submit" class="btn btn-primary">
-        Lisää merkki kokoelmaasi
-      </button>
-    </form>
-
-    <hr />
 
     {% if comments %}
+      <hr />
       <h5>Kommentit:</h5>
       {% for comment, date, username in comments %}
         <ul class="list-group margin-10vw">

@@ -106,7 +106,7 @@ input {
 /* kirjautunut thumbnail */
 @media screen and (min-width: 600px) {
     .image-thumbnail-kirjautunut {
-        max-width: 100px; 
+        max-width: 100px;
         height: auto;
     }
 }
@@ -114,7 +114,7 @@ input {
 /* kirjautnut thumbnail mobile */
 @media screen and (max-width: 600px) {
     .image-thumbnail-kirjautunut {
-        max-width: 20vw; 
+        max-width: 20vw;
         height: auto;
     }
 }
@@ -122,7 +122,7 @@ input {
 /* profile page thumbnail */
 @media screen and (min-width: 600px) {
     .image-thumbnail-profile {
-        max-width: 150px; 
+        max-width: 150px;
         height: auto;
     }
 }
@@ -130,7 +130,36 @@ input {
 /* profile page thumbnail mobile */
 @media screen and (max-width: 600px) {
     .image-thumbnail-profile {
-        max-width: 20vw; 
+        max-width: 20vw;
         height: auto;
+    }
+}
+
+/* merkki/id page thumbnail */
+@media screen and (min-width: 600px) {
+    .image-thumbnail-merkki {
+        max-width: 200px;
+        height: auto;
+    }
+}
+
+/* merkki/id page thumbnail mobile */
+@media screen and (max-width: 600px) {
+    .image-thumbnail-merkki {
+        max-width: 35vw;
+        height: auto;
+    }
+}
+
+/* merkki/id page reduce spacing between columns */
+.custom-row {
+    margin-left: 7vw;
+    margin-right: 7vw;
+}
+
+/* when in mobile view add margin between columns, because they are horizontal */
+@media (max-width: 576px) {
+    .spacing-mobile {
+        margin-bottom: 20px;
     }
 }
