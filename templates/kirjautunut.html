@@ -16,40 +16,15 @@
 
     <h4>Kaikki yhteisön haalarimerkit</h4>
 
-    <div class="btn-group" role="group">
-      {% if request.args.get("sort") == "desc" %}
-        <button
-          class="btn btn-primary btn-sm"
-          onclick="window.location.href='/kirjautunut?sort=asc'"
-          data-toggle="tooltip"
-          title="Paina tästä lajittelaaksesi vanhimmat merkit ensin"
-        >
-          Lajittele vanhin ensin
-        </button>
-      {% endif %}
-      {% if request.args.get("sort") == "asc" %}
-        <button
-          class="btn btn-primary btn-sm"
-          onclick="window.location.href='/kirjautunut?sort=desc'"
-          data-toggle="tooltip"
-          title="Paina tästä lajittelaaksesi uusimmat merkit ensin"
-        >
-          Lajittele uusin ensin
-        </button>
-      {% endif %}
-      {% if not request.args.get("sort") %}
-        <button
-          class="btn btn-primary btn-sm"
-          onclick="window.location.href='/kirjautunut?sort=desc'"
-          data-toggle="tooltip"
-          title="Paina tästä lajittelaaksesi uusimmat merkit ensin"
-        >
-          Lajittele uusin ensin
-        </button>
-      {% endif %}
-    </div>
     <div class="br-tag"></div>
     <form action="/kirjautunut" method="GET">
+      <div class="form-group">
+        <select name="sort" id="sort" class="form-control form-box">
+          <option value="asc">Vanhin ensin</option>
+          <option value="desc">Uusin ensin</option>
+        </select>
+      </div>
+
       <div class="input-group mb-3 form-box">
         <input
           type="text"
@@ -60,12 +35,15 @@
           aria-describedby="button-addon2"
           maxlength="100"
         />
+        <select name="category" id="category" class="form-control">
+          <option value="">Valitse kategoria</option>
+          {% for category in categories %}
+            <option value="{{ category.id }}">{{ category.name }}</option>
+          {% endfor %}
+        </select>
+
         <div class="input-group-append">
-          <button
-            class="btn btn-primary btn-sm"
-            type="submit"
-            id="button-addon2"
-          >
+          <button class="btn btn-primary btn" type="submit" id="button-addon2">
             Lähetä
           </button>
         </div>

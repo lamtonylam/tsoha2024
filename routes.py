@@ -43,10 +43,13 @@ def kirjautnut():
     # if user is not logged in dont run sqls etc.
     if users.get_username() == "":
         return render_template("kirjautunut.html")
+    
+    categories = sendpatch.get_categories()
 
     # sort patches by id, default is ascending, can be changed by adding ?sort to the url
     sort_order = request.args.get("sort")
     search_argument = request.args.get("query")
+    category_argument= request.args.get("category")
     # check if search argument is too long
     try:
         if len(search_argument) > 100:
@@ -56,13 +59,16 @@ def kirjautnut():
 
     order_by_sql = ""
     search_sql = ""
+    category_sql = ""
     if sort_order == "asc":
         order_by_sql = "ORDER BY id ASC"
     elif sort_order == "desc":
         order_by_sql = "ORDER BY id DESC"
     if search_argument:
         search_sql = f"WHERE LOWER(name) LIKE LOWER('%{search_argument}%')"
-    base_query = text(f"SELECT id, name, data FROM Patches {order_by_sql} {search_sql}")
+    if category_argument:
+        category_sql = f"WHERE category_id = {category_argument}"
+    base_query = text(f"SELECT id, name, data FROM Patches  {search_sql} {category_sql} {order_by_sql}")
     print(base_query)
     results = db.session.execute(base_query).fetchall()
 
@@ -80,6 +86,7 @@ def kirjautnut():
         "kirjautunut.html",
         # zipping results and patch images together, so that they are together
         results=zip(results, patch_images),
+        categories=categories,
     )
 
 
