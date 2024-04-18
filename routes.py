@@ -43,19 +43,20 @@ def kirjautnut():
     # if user is not logged in dont run sqls etc.
     if users.get_username() == "":
         return render_template("kirjautunut.html")
-    
+
     categories = sendpatch.get_categories()
 
     # sort patches by id, default is ascending, can be changed by adding ?sort to the url
     sort_order = request.args.get("sort")
     search_argument = request.args.get("query")
-    category_argument= request.args.get("category")
+    category_argument = request.args.get("category")
     # check if search argument is too long
     try:
         if len(search_argument) > 100:
             return redirect("/kirjautunut")
     except:
         pass
+    params = {}
 
     order_by_sql = ""
     search_sql = ""
@@ -65,12 +66,17 @@ def kirjautnut():
     elif sort_order == "desc":
         order_by_sql = "ORDER BY id DESC"
     if search_argument:
-        search_sql = f"WHERE LOWER(name) LIKE LOWER('%{search_argument}%')"
+        search_sql = "WHERE LOWER(name) LIKE LOWER(:search_argument)"
+        params["search_argument"] = f"%{search_argument}%"
+
     if category_argument:
-        category_sql = f"WHERE category_id = {category_argument}"
-    base_query = text(f"SELECT id, name, data FROM Patches  {search_sql} {category_sql} {order_by_sql}")
-    print(base_query)
-    results = db.session.execute(base_query).fetchall()
+        category_sql = "WHERE category_id = :category_id"
+        params["category_id"] = category_argument
+
+    base_query = text(
+        f"SELECT id, name, data FROM Patches {search_sql} {category_sql} {order_by_sql}"
+    )
+    results = db.session.execute(base_query, params).fetchall()
 
     # Fetch image data for each patch, encode it to base64 and pass it to the template
     patch_images = []
