@@ -53,23 +53,17 @@ def kirjautnut():
             return redirect("/kirjautunut")
     except:
         pass
+
+    order_by_sql = ""
+    search_sql = ""
     if sort_order == "asc":
-        query = text("SELECT id, name, data FROM Patches ORDER BY id ASC;")
-        result = db.session.execute(query)
-        results = result.fetchall()
+        order_by_sql = "ORDER BY id ASC"
     elif sort_order == "desc":
-        query = text("SELECT id, name, data FROM Patches ORDER BY id DESC;")
-        result = db.session.execute(query)
-        results = result.fetchall()
-    # search function query
-    elif search_argument:
-        query = text("SELECT id, name, data FROM Patches WHERE name LIKE LOWER(:query)")
-        result = db.session.execute(query, {"query": "%" + search_argument + "%"})
-        results = result.fetchall()
-    else:
-        query = text("SELECT id, name, data FROM Patches ORDER BY id ASC;")
-        result = db.session.execute(query)
-        results = result.fetchall()
+        order_by_sql = "ORDER BY id DESC"
+    if search_argument:
+        search_sql = f"WHERE name LIKE LOWER('%{search_argument}%')"
+    base_query = text(f"SELECT id, name, data FROM Patches {order_by_sql} {search_sql}")
+    results = db.session.execute(base_query).fetchall()
 
     # Fetch image data for each patch, encode it to base64 and pass it to the template
     patch_images = []
