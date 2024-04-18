@@ -61,8 +61,9 @@ def kirjautnut():
     elif sort_order == "desc":
         order_by_sql = "ORDER BY id DESC"
     if search_argument:
-        search_sql = f"WHERE name LIKE LOWER('%{search_argument}%')"
+        search_sql = f"WHERE LOWER(name) LIKE LOWER('%{search_argument}%')"
     base_query = text(f"SELECT id, name, data FROM Patches {order_by_sql} {search_sql}")
+    print(base_query)
     results = db.session.execute(base_query).fetchall()
 
     # Fetch image data for each patch, encode it to base64 and pass it to the template
