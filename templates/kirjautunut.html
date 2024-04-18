@@ -48,19 +48,28 @@
         </button>
       {% endif %}
     </div>
-
+    <div class="br-tag"></div>
     <form action="/kirjautunut" method="GET">
-      Hae haalarimerkkejä:
-      <input
-        type="text"
-        name="query"
-        class="form-control form-box"
-        placeholder="Hakusana:"
-        required
-        maxlength="100"
-      />
-      <br />
-      <input type="submit" value="Lähetä" class="btn btn-primary btn-sm" />
+      <div class="input-group mb-3 form-box">
+        <input
+          type="text"
+          name="query"
+          class="form-control"
+          placeholder="Hakusana:"
+          aria-label="Hakusana:"
+          aria-describedby="button-addon2"
+          maxlength="100"
+        />
+        <div class="input-group-append">
+          <button
+            class="btn btn-primary btn-sm"
+            type="submit"
+            id="button-addon2"
+          >
+            Lähetä
+          </button>
+        </div>
+      </div>
     </form>
 
     <hr />
@@ -71,7 +80,7 @@
           src="data:image/jpeg;base64,{{ image }}"
           alt="Image for patch {{ result[1] }}"
           class="image-thumbnail-kirjautunut"
-         />
+        />
         <br />
         <br />
       {% endif %}
