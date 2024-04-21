@@ -13,6 +13,15 @@
 - ✅ Removing a patch from general collection
 - ✅ Adding patches from the general collection to users' collection.
 - ✅ Profile page that shows how many patches a user has added to their collection
+##### 21.4.2024
+- ✅ Patch has categories
+- ✅ General collection has search functionality
+- ✅ Thumbnail images of patches are displayed on general collection page
+- ✅ Patch image can be zoomed on click on individual patch page
+- ✅ Creator of patch can now delete patch that they created
+- ✅ Comment functionality for patches
+- ✅ CSRF-vulnerability mitigated  
+- The project is almost finished, with minor final polishes only required. Minimum target of 5 database tables has been also achieved.
 
 
 # Using app on the web
