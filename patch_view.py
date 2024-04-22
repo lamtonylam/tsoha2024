@@ -65,11 +65,16 @@ def get_category(id):
 def patch_into_collection(patch_id, user_id):
     sql_set_timezone = text("SET TIME ZONE 'Europe/Helsinki';")
     db.session.execute(sql_set_timezone)
-    sql = text(
-        "INSERT INTO UsersToPatches (patch_id, user_id, sent_at) VALUES (:patch_id, :user_id, NOW())"
-    )
-    db.session.execute(sql, {"patch_id": patch_id, "user_id": user_id})
-    db.session.commit()
+    try:
+        sql = text(
+            "INSERT INTO UsersToPatches (patch_id, user_id, sent_at) VALUES (:patch_id, :user_id, NOW())"
+        )
+        db.session.execute(sql, {"patch_id": patch_id, "user_id": user_id})
+        db.session.commit()
+    except:
+        return False
+
+    return True
 
 
 def add_comment(patch_id, user_id, comment):
@@ -84,9 +89,9 @@ def add_comment(patch_id, user_id, comment):
             sql, {"patch_id": patch_id, "user_id": user_id, "comment": comment}
         )
         db.session.commit()
-        flash("Kommentti lisätty onnistuneesti!")
+        flash("Kommentti lisätty onnistuneesti!", "success")
     except:
-        flash("Kommentin lisääminen epäonnistui!")
+        flash("Kommentin lisääminen epäonnistui!", "error")
 
 
 def delete_patch(patch_id):
