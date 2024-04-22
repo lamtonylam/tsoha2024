@@ -40,9 +40,6 @@ def index():
 # logged in page, shows all patches and user's own patches
 @app.route("/kirjautunut")
 def kirjautnut():
-    # if user is not logged in dont run sqls etc.
-    if users.get_username() == "":
-        return render_template("kirjautunut.html")
 
     categories = sendpatch.get_categories()
 
