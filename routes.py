@@ -417,9 +417,9 @@ def delete_own_patch():
         except Exception as e:
             print(e)
             flash("Merkkiä ei voitu poistaa", "error")
-            return redirect("/deleteownpatch")
+            return redirect("/profile/deletepatch")
         flash("Merkki poistettu onnistuneesti", "success")
-        return redirect("/deleteownpatch")
+        return redirect("/profile/deletepatch")
     elif request.method == "GET":
         username = users.get_username()
 
