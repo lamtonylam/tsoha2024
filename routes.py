@@ -58,20 +58,30 @@ def kirjautnut():
     order_by_sql = ""
     search_sql = ""
     category_sql = ""
+    search_category_argument = ""
     if sort_order == "asc":
         order_by_sql = "ORDER BY id ASC"
     elif sort_order == "desc":
         order_by_sql = "ORDER BY id DESC"
     if search_argument:
-        search_sql = "WHERE LOWER(name) LIKE LOWER(:search_argument)"
+        search_sql = "LOWER(name) LIKE LOWER(:search_argument)"
         params["search_argument"] = f"%{search_argument}%"
 
     if category_argument:
-        category_sql = "WHERE category_id = :category_id"
+        category_sql = "category_id = :category_id"
         params["category_id"] = category_argument
 
+    if search_argument and category_argument:
+        search_category_argument = "WHERE " + " AND ".join((search_sql, category_sql))
+        search_sql = ""
+        category_sql = ""
+    elif search_argument:
+        search_sql = "WHERE " + search_sql
+    elif category_argument:
+        category_sql = "WHERE " + category_sql
+
     base_query = text(
-        f"SELECT id, name, data FROM Patches {search_sql} {category_sql} {order_by_sql}"
+        f"SELECT id, name, data FROM Patches {search_sql} {category_sql} {search_category_argument} {order_by_sql}"
     )
     results = db.session.execute(base_query, params).fetchall()
 
