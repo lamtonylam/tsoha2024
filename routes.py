@@ -223,6 +223,9 @@ def addcomment():
         abort(403)
     patch_id = request.form["id"]
     comment = request.form["comment"]
+    if len(comment) > 1000:
+        flash("Kommentti ei voi olla yli 1000 merkkiä pitkä", "error")
+        return redirect(f"/merkki/{patch_id}#commentform")
     user_id = users.user_id()
     patch_view.add_comment(patch_id, user_id, comment)
     return redirect(f"/merkki/{patch_id}#commentform")
@@ -367,7 +370,9 @@ def login():
             flash("Kirjautuminen onnistui", "success")
             return redirect("/")
         else:
-            return render_template("login.html", message="Väärä tunnus tai salasana", username=username)
+            return render_template(
+                "login.html", message="Väärä tunnus tai salasana", username=username
+            )
 
 
 # logging out user
