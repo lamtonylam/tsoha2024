@@ -23,13 +23,16 @@
     <p>Olet kirjautunut nimellä: <b>{{ session.username }}</b></p>
 
     <h4>Kaikki yhteisön haalarimerkit</h4>
-
     <div class="br-tag"></div>
     <form action="/kirjautunut" method="GET">
       <div class="form-group">
         <select name="sort" id="sort" class="form-control form-box">
-          <option value="asc">Vanhin ensin</option>
-          <option value="desc">Uusin ensin</option>
+          <option {% if sort_order == "asc" %}selected{% endif %} value="asc">
+            Vanhin ensin
+          </option>
+          <option {% if sort_order == "desc" %}selected{% endif %} value="desc">
+            Uusin ensin
+          </option>
         </select>
       </div>
 
@@ -42,20 +45,26 @@
           aria-label="Hakusana:"
           aria-describedby="button-addon2"
           maxlength="100"
+          {% if search_argument %}
+            value="{{ search_argument }}"
+          {% endif %}
         />
         <select name="category" id="category" class="form-control">
           <option value="">Valitse kategoria</option>
           {% for category in categories %}
-            <option value="{{ category.id }}">{{ category.name }}</option>
+            <option
+              value="{{ category.id }}"
+              {% if category.id == category_searched %}selected{% endif %}
+            >
+              {{ category.name }}
+            </option>
           {% endfor %}
         </select>
-
-        <div class="input-group-append">
-          <button class="btn btn-primary btn" type="submit" id="button-addon2">
-            Lähetä
-          </button>
-        </div>
       </div>
+      <a href="/kirjautunut" class="btn btn-outline-primary btn">Tyhjennä</a>
+      <button class="btn btn-primary btn" type="submit" id="button-addon2">
+        Lähetä
+      </button>
     </form>
 
     <hr />

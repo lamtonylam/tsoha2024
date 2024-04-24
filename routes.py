@@ -95,11 +95,21 @@ def kirjautnut():
             image = None
         patch_images.append(image)
 
+    category_searched = ""
+    if category_argument:
+        for category in categories:
+            if category[0] == int(category_argument):
+                category_searched = category[0]
+                break
+
     return render_template(
         "kirjautunut.html",
         # zipping results and patch images together, so that they are together
         results=zip(results, patch_images),
         categories=categories,
+        search_argument=search_argument,
+        category_searched=category_searched,
+        sort_order=sort_order,
     )
 
 
@@ -357,7 +367,7 @@ def login():
             flash("Kirjautuminen onnistui", "success")
             return redirect("/")
         else:
-            return render_template("login.html", message="Väärä tunnus tai salasana")
+            return render_template("login.html", message="Väärä tunnus tai salasana", username=username)
 
 
 # logging out user
