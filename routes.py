@@ -98,7 +98,7 @@ def kirjautnut():
 def merkki(id):
     referring_page = request.referrer
     referrer = ""
-    if  "profile" in referring_page:
+    if "profile" in referring_page:
         referrer = "profile"
     elif "kirjautunut" in referring_page:
         referrer = "kirjautunut"
@@ -169,7 +169,10 @@ def to_collection():
     if patch_view.patch_into_collection(patch_id, user_id):
         flash("Merkki lisätty omaan kokoelmaan onnistuneesti", "success")
     else:
-        flash("Merkin lisääminen omaan kokoelmaan epäonnistui, merkki on jo kokoelmassasi", "error")
+        flash(
+            "Merkin lisääminen omaan kokoelmaan epäonnistui, merkki on jo kokoelmassasi",
+            "error",
+        )
     return redirect("/kirjautunut")
 
 
@@ -210,7 +213,10 @@ def addcomment():
 def send():
     if request.method == "GET":
         categories = sendpatch.get_categories()
-        return render_template("new_merkki.html", categories=categories,)
+        return render_template(
+            "new_merkki.html",
+            categories=categories,
+        )
     elif request.method == "POST":
         categories = sendpatch.get_categories()
         name = request.form.get("nimi")
@@ -218,13 +224,15 @@ def send():
         if len(name) > 100:
             flash("Merkkin nimi ei voi olla yli 100 merkkiä pitkä", "error")
             return render_template(
-                "new_merkki.html", categories=categories,
+                "new_merkki.html",
+                categories=categories,
             )
 
         if len(name) == 0:
             flash("Merkin nimi ei voi olla tyhjä", "error")
             return render_template(
-                "new_merkki.html", categories=categories,
+                "new_merkki.html",
+                categories=categories,
             )
 
         if session["csrf_token"] != request.form["csrf_token"]:
@@ -247,7 +255,8 @@ def send():
             if not file_name.lower().endswith((".jpg", ".jpeg")):
                 flash("Vain .jpg ja .jpeg tiedostot sallittu", "error")
                 return render_template(
-                    "new_merkki.html", categories=categories,
+                    "new_merkki.html",
+                    categories=categories,
                 )
 
         # get user id
@@ -257,8 +266,11 @@ def send():
         if not file:
             try:
                 sendpatch.insert_patch_into_generalcollection(name, userid, category)
-            except:
-                flash("Virhe tapahtui, voi olla että merkin nimi on jo olemassa", "error")
+            except Exception as e:
+                print(e)
+                flash(
+                    "Virhe tapahtui, voi olla että merkin nimi on jo olemassa", "error"
+                )
                 return render_template(
                     "new_merkki.html",
                     categories=categories,
@@ -268,8 +280,11 @@ def send():
                 sendpatch.insert_patch_into_generalcollection(
                     name, userid, category, file
                 )
-            except:
-                flash("Virhe tapahtui, voi olla että merkin nimi on jo olemassa", "error")
+            except Exception as e:
+                print(e)
+                flash(
+                    "Virhe tapahtui, voi olla että merkin nimi on jo olemassa", "error"
+                )
                 return render_template(
                     "new_merkki.html",
                     categories=categories,
@@ -294,22 +309,29 @@ def register():
         if len(username) < 1 or len(username) > 20:
             return render_template(
                 "register.html",
-                message="Käyttäjätunnuksen tulee olla 1-20 merkkiä pitkä", username=username
+                message="Käyttäjätunnuksen tulee olla 1-20 merkkiä pitkä",
+                username=username,
             )
         password1 = request.form["password1"]
         password2 = request.form["password2"]
         if password1 != password2:
-            return render_template("register.html", message="Salasanat eroavat", username=username)
+            return render_template(
+                "register.html", message="Salasanat eroavat", username=username
+            )
         if len(password1) < 8 or len(password1) > 20:
             return render_template(
-                "register.html", message="Salasanan tulee olla 8-20 merkkiä pitkä,", username=username
+                "register.html",
+                message="Salasanan tulee olla 8-20 merkkiä pitkä,",
+                username=username,
             )
         if users.register(username, password1):
             flash("Rekisteröinti onnistui", "success")
             return redirect("/")
         else:
             return render_template(
-                "register.html", message="Rekisteröinti ei onnistunut", username=username
+                "register.html",
+                message="Rekisteröinti ei onnistunut",
+                username=username,
             )
 
 
@@ -370,6 +392,7 @@ def profile():
         patch_amount=len(own_patches_result),
         user_submitted_amount=len(user_submitted_patches),
     )
+
 
 # page to delete user's own patches
 @app.route("/profile/deletepatch", methods=["GET", "POST"])

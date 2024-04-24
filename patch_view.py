@@ -91,14 +91,17 @@ def add_comment(patch_id, user_id, comment):
         )
         db.session.commit()
         flash("Kommentti lisätty onnistuneesti!", "success")
-    except:
+    except Exception as e:
+        print(e)
         flash("Kommentin lisääminen epäonnistui!", "error")
+
 
 # delete a patch from general collection
 def delete_patch(patch_id):
     sql = text("DELETE FROM Patches WHERE id = :patch_id")
     db.session.execute(sql, {"patch_id": patch_id})
     db.session.commit()
+
 
 # delete a patch from user's collection
 def delete_patch_from_collection(patch_id, user_id):

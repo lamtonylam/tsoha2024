@@ -24,11 +24,13 @@ def login(username, password):
 def logout():
     try:
         del session["username"]
-    except:
+    except Exception as e:
+        print(e)
         pass
     try:
         del session["user_id"]
-    except:
+    except Exception as e:
+        print(e)
         pass
 
 
@@ -40,7 +42,8 @@ def register(username, password):
         )
         db.session.execute(sql, {"username": username, "password": hash_value})
         db.session.commit()
-    except:
+    except Exception as e:
+        print(e)
         return False
     return login(username, password)
 
