@@ -4,6 +4,18 @@
 
 {% block content %}
   {% if session.username %}
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          {% if referrer == "profile" %}
+          <a href="/profile">Profiili</a>
+          {% else %}
+          <a href="/haalarimerkit">Haalarimerkit</a>
+          {% endif %}
+        </li>
+        <li class="breadcrumb-item" aria-current="page">Merkki</li>
+      </ol>
+    </nav>
     <div class="container">
       <div class="row custom-row">
         <!-- tekstit vasemmalle -->
@@ -23,7 +35,7 @@
               Lisää merkki kokoelmaasi
             </button>
           </form>
-					<div class="spacing-mobile"></div>
+          <div class="spacing-mobile"></div>
         </div>
         <!-- kuva oikealle -->
         <div class="col-sm col-custom">

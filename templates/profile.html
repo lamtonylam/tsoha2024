@@ -3,7 +3,12 @@
 {% block title %}Profiili{% endblock %}
 
 {% block content %}
-
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/kirjautunut">Haalarimerkit</a></li>
+      <li class="breadcrumb-item" aria-current="page">Profiili</li>
+    </ol>
+  </nav>
   {% if session.username %}
     <p>Sinun käyttäjätunnuksesi on: <b>{{ username }}</b></p>
 
@@ -31,6 +36,11 @@
       </p>
     {% endif %}
 
+    <a class="btn btn-danger" href="/profile/deletepatch" role="button"
+      >Poista merkkejä omasta kokoelmasta</a
+    >
+    <br />
+
     <br />
 
     <h4>Omat merkit:</h4>
@@ -51,7 +61,9 @@
         Lisätty omaan kokoelmaan:
         <b>{{ result.sent_at.strftime("%Y-%m-%d %H:%M:%S") }}</b>
       </p>
-      <a class="btn btn-primary" href="/merkki/{{ result.patch_id }}">Tietoja</a>
+      <a class="btn btn-primary" href="/merkki/{{ result.patch_id }}"
+        >Tietoja</a
+      >
       <hr />
     {% endfor %}
   {% endif %}

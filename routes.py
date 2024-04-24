@@ -96,6 +96,12 @@ def kirjautnut():
 # individual patch view
 @app.route("/merkki/<int:id>")
 def merkki(id):
+    referring_page = request.referrer
+    referrer = ""
+    if  "profile" in referring_page:
+        referrer = "profile"
+    elif "kirjautunut" in referring_page:
+        referrer = "kirjautunut"
     # Fetch patch name and user id of the patch
     patch_name = patch_view.get_patch_name(id)
     created_by_user = patch_view.get_created_by_user(id)
@@ -137,6 +143,7 @@ def merkki(id):
             comments=comments,
             is_mobile=is_mobile,
             category=category,
+            referrer=referrer,
         )
 
     return render_template(
@@ -148,6 +155,7 @@ def merkki(id):
         logged_in_username=logged_in_username,
         is_mobile=is_mobile,
         category=category,
+        referrer=referrer,
     )
 
 
@@ -161,7 +169,7 @@ def to_collection():
     if patch_view.patch_into_collection(patch_id, user_id):
         flash("Merkki lisätty omaan kokoelmaan onnistuneesti", "success")
     else:
-        flash("Merkin lisääminen omaan kokoelmaan epäonnistui", "error")
+        flash("Merkin lisääminen omaan kokoelmaan epäonnistui, merkki on jo kokoelmassasi", "error")
     return redirect("/kirjautunut")
 
 
@@ -339,7 +347,7 @@ def profile():
 
     user_id = users.user_id()
     query = text(
-        "SELECT Patches.name, UsersToPatches.sent_at, UsersToPatches.patch_id, Patches.data \
+        "SELECT Patches.name, UsersToPatches.sent_at, UsersToPatches.patch_id, Patches.data, UsersToPatches.id \
                 FROM Patches, UsersToPatches \
                 WHERE Patches.id = UsersToPatches.patch_id AND UsersToPatches.user_id = :user_id;"
     )
@@ -362,3 +370,49 @@ def profile():
         patch_amount=len(own_patches_result),
         user_submitted_amount=len(user_submitted_patches),
     )
+
+# page to delete user's own patches
+@app.route("/profile/deletepatch", methods=["GET", "POST"])
+def delete_own_patch():
+    if request.method == "POST":
+        if session["csrf_token"] != request.form["csrf_token"]:
+            abort(403)
+        result_id = request.form["patch_id"]
+        user_id = users.user_id()
+        try:
+            patch_view.delete_patch_from_collection(result_id, user_id)
+        except Exception as e:
+            print(e)
+            flash("Merkkiä ei voitu poistaa", "error")
+            return redirect("/deleteownpatch")
+        flash("Merkki poistettu onnistuneesti", "success")
+        return redirect("/deleteownpatch")
+    elif request.method == "GET":
+        username = users.get_username()
+
+        sql = text("SELECT * FROM Patches WHERE created_by_user = :user_id")
+        result = db.session.execute(sql, {"user_id": users.user_id()})
+
+        user_id = users.user_id()
+        query = text(
+            "SELECT Patches.name, UsersToPatches.sent_at, UsersToPatches.patch_id, Patches.data, UsersToPatches.id \
+                    FROM Patches, UsersToPatches \
+                    WHERE Patches.id = UsersToPatches.patch_id AND UsersToPatches.user_id = :user_id;"
+        )
+        result = db.session.execute(query, {"user_id": user_id})
+        own_patches_result = result.fetchall()
+
+        patch_images = []
+        for patch in own_patches_result:
+            image = patch[3]
+            if image:
+                image = base64.b64encode(image).decode("utf-8")
+                patch_images.append(image)
+            else:
+                patch_images.append(None)
+
+        return render_template(
+            "delete_patch.html",
+            username=username,
+            own_patches_result=zip(own_patches_result, patch_images),
+        )

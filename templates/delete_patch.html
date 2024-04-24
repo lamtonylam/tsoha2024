@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}Poista merkkejä{% endblock %}
+
+{% block content %}
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/kirjautunut">Haalarimerkit</a></li>
+      <li class="breadcrumb-item"><a href="/profile">Profiili</a></li>
+      <li class="breadcrumb-item" aria-current="page">Kokoelmasta poisto</li>
+    </ol>
+  </nav>
+  {% with successes = get_flashed_messages(category_filter=["success"]) %}
+    {% if successes %}
+      {% for success in successes %}
+        <div class="alert alert-success" role="alert">{{ success }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  {% with errors = get_flashed_messages(category_filter=["error"]) %}
+    {% if errors %}
+      {% for error in errors %}
+        <div class="alert alert-danger" role="alert">{{ error }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  {% if session.username %}
+    <p>Sinun käyttäjätunnuksesi on: <b>{{ username }}</b></p>
+    <h2>Poista merkkejä omasta kokoelmastasi</h2>
+    <hr />
+    <h4>Omat merkit:</h4>
+
+    <hr />
+    {% for result, image in own_patches_result %}
+      <p>Merkin nimi: <b> {{ result.name }}</b></p>
+      {% if image %}
+        <img
+          src="data:image/jpeg;base64,{{ image }}"
+          alt="Image for patch {{ result[1] }}"
+          class="image-thumbnail-profile"
+        />
+        <br />
+        <br />
+      {% endif %}
+
+      <form action="/profile/deletepatch" method="post">
+        <input
+          type="hidden"
+          name="csrf_token"
+          value="{{ session.csrf_token }}"
+        />
+        <input type="hidden" name="patch_id" value="{{ result.patch_id }}" />
+        <button type="submit" class="btn btn-danger">Poista merkki</button>
+
+        <hr />
+      </form>
+    {% endfor %}
+  {% endif %}
+
+  {% if not session.username %}
+    <p>Et ole kirjautunut sisään. Kirjaudu sisään.</p>
+    <button onclick="window.location.href='/login'" class="btn btn-primary">
+      Kirjaudu sisään
+    </button>
+  {% endif %}
+{% endblock %}

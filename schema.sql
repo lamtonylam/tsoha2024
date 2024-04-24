@@ -30,7 +30,8 @@ CREATE TABLE UsersToPatches (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES Users (id),
     patch_id INTEGER REFERENCES Patches (id) ON DELETE CASCADE,
-    sent_at TIMESTAMP
+    sent_at TIMESTAMP,
+    UNIQUE(user_id, patch_id)
 );
 
 CREATE TABLE Comments (
