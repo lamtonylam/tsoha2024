@@ -2,7 +2,7 @@ from app import app
 from flask import render_template, request, redirect
 from flask import session
 from flask import flash
-import users
+import modules.users as users
 from sqlalchemy.sql import text
 from db import db
 from flask import abort
@@ -12,13 +12,13 @@ from os import getenv
 import base64
 
 # for random texts in index.html
-import random_text_generator
+import modules.random_text_generator as random_text_generator
 
 # module import for sending patches into general collection
-import sendpatch
+import modules.sendpatch as sendpatch
 
 # module for patch_view individual patch
-import patch_view
+import modules.patch_view as patch_view
 
 from PIL import Image
 from io import BytesIO
