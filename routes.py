@@ -116,12 +116,18 @@ def kirjautnut():
 # individual patch view
 @app.route("/merkki/<int:id>")
 def merkki(id):
-    referring_page = request.referrer
-    referrer = ""
-    if "profile" in referring_page:
-        referrer = "profile"
-    elif "kirjautunut" in referring_page:
-        referrer = "kirjautunut"
+    # referrer for patch site, because of navbar variable
+    try:
+        referring_page = request.referrer
+        referrer = ""
+        if "profile" in referring_page:
+            referrer = "profile"
+        elif "kirjautunut" in referring_page:
+            referrer = "kirjautunut"
+    # if cant find referrer, redirect to 404
+    except Exception as e:
+        print(e)
+        return redirect("/404")
     # Fetch patch name and user id of the patch
     patch_name = patch_view.get_patch_name(id)
     created_by_user = patch_view.get_created_by_user(id)
