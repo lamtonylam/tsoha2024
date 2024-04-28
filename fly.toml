@@ -6,6 +6,8 @@
 app = 'haalarimerkkidex'
 primary_region = "arn"
 
+swap_size_mb = 1024
+
 [build]
 
 [env]
