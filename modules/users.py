@@ -24,11 +24,8 @@ def login(username, password):
 def logout():
     try:
         del session["username"]
-    except Exception as e:
-        print(e)
-        pass
-    try:
         del session["user_id"]
+        del session["csrf_token"]
     except Exception as e:
         print(e)
         pass
