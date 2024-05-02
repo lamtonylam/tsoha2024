@@ -367,26 +367,13 @@ def register():
 # logging in user
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    if request.method == "GET":
-        return render_template("login.html")
-    if request.method == "POST":
-        username = request.form["username"]
-        password = request.form["password"]
-        if users.login(username, password):
-            flash("Kirjautuminen onnistui", "success")
-            return redirect("/")
-        else:
-            return render_template(
-                "login.html", message="Väärä tunnus tai salasana", username=username
-            )
+    return users.handle_login(request)
 
 
 # logging out user
 @app.route("/logout")
 def logout():
-    users.logout()
-    flash("Olet kirjautunut ulos onnistuneesti", "success")
-    return redirect("/")
+    return users.logout()
 
 
 # profile page

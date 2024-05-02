@@ -7,6 +7,21 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from sqlalchemy import text
 import secrets
 
+from flask import flash, redirect, render_template
+
+def handle_login(request):
+    if request.method == "GET":
+        return render_template("login.html")
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+        if login(username, password):
+            flash("Kirjautuminen onnistui", "success")
+            return redirect("/")
+        else:
+            return render_template(
+                "login.html", message="Väärä tunnus tai salasana", username=username
+            )
 
 def login(username, password):
     sql = text("SELECT id, password, username FROM users WHERE username=:username")
@@ -29,9 +44,12 @@ def logout():
         del session["username"]
         del session["user_id"]
         del session["csrf_token"]
+        flash("Olet kirjautunut ulos onnistuneesti", "success")
+        return redirect("/") 
     except Exception as e:
         print(e)
-        pass
+        flash("Uloskirjautuminen ei onnistunut", "error")
+
 
 
 def register(username, password):
