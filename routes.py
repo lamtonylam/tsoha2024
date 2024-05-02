@@ -399,12 +399,12 @@ def profile():
     user_submitted_patches = result.fetchall()
 
     user_id = users.user_id()
-    query = text(
+    sql = text(
         "SELECT Patches.name, UsersToPatches.sent_at, UsersToPatches.patch_id, Patches.data, UsersToPatches.id \
                 FROM Patches, UsersToPatches \
                 WHERE Patches.id = UsersToPatches.patch_id AND UsersToPatches.user_id = :user_id;"
     )
-    result = db.session.execute(query, {"user_id": user_id})
+    result = db.session.execute(sql, {"user_id": user_id})
     own_patches_result = result.fetchall()
 
     patch_images = []
@@ -448,12 +448,12 @@ def delete_own_patch():
         result = db.session.execute(sql, {"user_id": users.user_id()})
 
         user_id = users.user_id()
-        query = text(
+        sql = text(
             "SELECT Patches.name, UsersToPatches.sent_at, UsersToPatches.patch_id, Patches.data, UsersToPatches.id \
                     FROM Patches, UsersToPatches \
                     WHERE Patches.id = UsersToPatches.patch_id AND UsersToPatches.user_id = :user_id;"
         )
-        result = db.session.execute(query, {"user_id": user_id})
+        result = db.session.execute(sql, {"user_id": user_id})
         own_patches_result = result.fetchall()
 
         patch_images = []

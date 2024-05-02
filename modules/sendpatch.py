@@ -39,8 +39,8 @@ def insert_patch_into_generalcollection(name, userid, category, file=None):
 
 # Function to get the id of a patch by its name
 def get_patch_id(name):
-    query = text("SELECT id FROM Patches WHERE name = :name")
-    result = db.session.execute(query, {"name": name})
+    sql = text("SELECT id FROM Patches WHERE name = :name")
+    result = db.session.execute(sql, {"name": name})
     return result.fetchone()[0]
 
 
