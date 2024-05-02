@@ -331,38 +331,7 @@ def send():
 # registering user
 @app.route("/register", methods=["GET", "POST"])
 def register():
-    if request.method == "GET":
-        return render_template("register.html")
-    if request.method == "POST":
-        username = request.form["username"]
-        if len(username) < 1 or len(username) > 20:
-            return render_template(
-                "register.html",
-                message="Käyttäjätunnuksen tulee olla 1-20 merkkiä pitkä",
-                username=username,
-            )
-        password1 = request.form["password1"]
-        password2 = request.form["password2"]
-        if password1 != password2:
-            return render_template(
-                "register.html", message="Salasanat eroavat", username=username
-            )
-        if len(password1) < 8 or len(password1) > 20:
-            return render_template(
-                "register.html",
-                message="Salasanan tulee olla 8-20 merkkiä pitkä,",
-                username=username,
-            )
-        if users.register(username, password1):
-            flash("Rekisteröinti onnistui", "success")
-            return redirect("/")
-        else:
-            return render_template(
-                "register.html",
-                message="Rekisteröinti ei onnistunut",
-                username=username,
-            )
-
+    return users.handle_register(request)
 
 # logging in user
 @app.route("/login", methods=["GET", "POST"])
