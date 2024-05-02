@@ -38,8 +38,8 @@ def index():
 
 
 # logged in page, shows all patches and user's own patches
-@app.route("/kirjautunut")
-def kirjautnut():
+@app.route("/patches")
+def patches():
 
     categories = sendpatch.get_categories()
 
@@ -50,7 +50,7 @@ def kirjautnut():
     # check if search argument is too long
     try:
         if len(search_argument) > 100:
-            return redirect("/kirjautunut")
+            return redirect("/patches")
     except:
         pass
     params = {}
@@ -103,7 +103,7 @@ def kirjautnut():
                 break
 
     return render_template(
-        "kirjautunut.html",
+        "patches.html",
         # zipping results and patch images together, so that they are together
         results=zip(results, patch_images),
         categories=categories,
@@ -122,8 +122,8 @@ def merkki(id):
         referrer = ""
         if "profile" in referring_page:
             referrer = "profile"
-        elif "kirjautunut" in referring_page:
-            referrer = "kirjautunut"
+        elif "patches" in referring_page:
+            referrer = "patches"
     # if cant find referrer, redirect to 404
     except Exception as e:
         print(e)
@@ -199,7 +199,7 @@ def to_collection():
             "Merkin lisääminen omaan kokoelmaan epäonnistui, merkki on jo kokoelmassasi",
             "error",
         )
-    return redirect("/kirjautunut")
+    return redirect("/patches")
 
 
 # deleting a patch from general collection
@@ -216,10 +216,10 @@ def delete_from_collection():
         masterpassword = request.form["masterpassword"]
         # get master password from environment variable and check if it matches
         if masterpassword != getenv("master_key"):
-            return redirect("/kirjautunut")
+            return redirect("/patches")
     patch_view.delete_patch(patch_id)
     flash("Merkki poistettu onnistuneesti", "success")
-    return redirect("/kirjautunut")
+    return redirect("/patches")
 
 
 # add comment to patch

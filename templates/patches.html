@@ -24,7 +24,7 @@
 
     <h4>Kaikki yhteisön haalarimerkit</h4>
     <div class="br-tag"></div>
-    <form action="/kirjautunut" method="GET">
+    <form action="/patches" method="GET">
       <div class="form-group">
         <select name="sort" id="sort" class="form-control form-box">
           <option {% if sort_order == "asc" %}selected{% endif %} value="asc">
@@ -61,7 +61,7 @@
           {% endfor %}
         </select>
       </div>
-      <a href="/kirjautunut" class="btn btn-outline-primary btn">Tyhjennä</a>
+      <a href="/patches" class="btn btn-outline-primary btn">Tyhjennä</a>
       <button class="btn btn-primary btn" type="submit" id="button-addon2">
         Lähetä
       </button>
