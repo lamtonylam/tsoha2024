@@ -20,6 +20,9 @@ import modules.sendpatch as sendpatch
 # module for patch_view individual patch
 import modules.patch_view as patch_view
 
+# module for profile page
+import modules.profile as profile_function
+
 from PIL import Image
 from io import BytesIO
 import base64
@@ -333,6 +336,7 @@ def send():
 def register():
     return users.handle_register(request)
 
+
 # logging in user
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -350,18 +354,9 @@ def logout():
 def profile():
     username = users.get_username()
 
-    sql = text("SELECT * FROM Patches WHERE created_by_user = :user_id")
-    result = db.session.execute(sql, {"user_id": users.user_id()})
-    user_submitted_patches = result.fetchall()
+    user_submitted_patches = profile_function.user_submitted_patches()
 
-    user_id = users.user_id()
-    sql = text(
-        "SELECT Patches.name, UsersToPatches.sent_at, UsersToPatches.patch_id, Patches.data, UsersToPatches.id \
-                FROM Patches, UsersToPatches \
-                WHERE Patches.id = UsersToPatches.patch_id AND UsersToPatches.user_id = :user_id;"
-    )
-    result = db.session.execute(sql, {"user_id": user_id})
-    own_patches_result = result.fetchall()
+    own_patches_result = profile_function.own_patches()
 
     patch_images = []
     for patch in own_patches_result:
@@ -400,17 +395,7 @@ def delete_own_patch():
     elif request.method == "GET":
         username = users.get_username()
 
-        sql = text("SELECT * FROM Patches WHERE created_by_user = :user_id")
-        result = db.session.execute(sql, {"user_id": users.user_id()})
-
-        user_id = users.user_id()
-        sql = text(
-            "SELECT Patches.name, UsersToPatches.sent_at, UsersToPatches.patch_id, Patches.data, UsersToPatches.id \
-                    FROM Patches, UsersToPatches \
-                    WHERE Patches.id = UsersToPatches.patch_id AND UsersToPatches.user_id = :user_id;"
-        )
-        result = db.session.execute(sql, {"user_id": user_id})
-        own_patches_result = result.fetchall()
+        own_patches_result = profile_function.own_patches()
 
         patch_images = []
         for patch in own_patches_result:
