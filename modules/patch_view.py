@@ -1,3 +1,7 @@
+"""
+This module is used for the template patch_view.html.
+"""
+
 from sqlalchemy.sql import text
 from db import db
 from flask import flash

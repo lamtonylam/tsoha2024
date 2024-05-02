@@ -1,3 +1,6 @@
+"""
+This module is used for inserting patches.
+"""
 from sqlalchemy.sql import text
 from db import db
 from PIL import Image
