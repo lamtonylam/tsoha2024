@@ -72,14 +72,17 @@
       </div>
       <div class="form-group">
         <p><b>Lisää kuva:</b></p>
-        <p>Kuvan pitää olla .jpg tai .jpeg muodossa</p>
+        <small id="fileHelp" class="form-text text-muted">
+          Kuvan pitää olla .jpg , .jpeg tai .png muodossa
+        </small>
         <input
           type="file"
           for="formFile"
           class="form-label"
           id="file"
           name="file"
-          accept=".jpeg,.jpg"
+          accept=".jpeg, .jpg, .png"
+          aria-describedby="fileHelp"
         />
       </div>
       <br />

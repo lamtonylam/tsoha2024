@@ -284,8 +284,8 @@ def send():
         if file:
             file_name = file.filename
             # check if file is jpg or jpeg
-            if not file_name.lower().endswith((".jpg", ".jpeg")):
-                flash("Vain .jpg ja .jpeg tiedostot sallittu", "error")
+            if not file_name.lower().endswith((".jpg", ".jpeg", ".png")):
+                flash("Vain .jpg .jpeg .png tiedostot sallittu", "error")
                 return render_template(
                     "new_merkki.html",
                     categories=categories,
