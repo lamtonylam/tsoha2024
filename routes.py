@@ -301,7 +301,7 @@ def send():
             except Exception as e:
                 print(e)
                 flash(
-                    "Virhe tapahtui, voi olla että merkin nimi on jo olemassa", "error"
+                    "Virhe tapahtui, merkin nimi on jo olemassa", "error"
                 )
                 return render_template(
                     "new_merkki.html",
@@ -314,9 +314,12 @@ def send():
                 )
             except Exception as e:
                 print(e)
-                flash(
-                    "Virhe tapahtui, voi olla että merkin nimi on jo olemassa", "error"
-                )
+                if "Image is too large" in str(e):
+                    flash("Kuvan maksimikoko on 10MB", "error")
+                elif "duplicate key value" in str(e):
+                    flash(
+                        "Virhe tapahtui, merkin nimi on jo olemassa", "error"
+                    )
                 return render_template(
                     "new_merkki.html",
                     categories=categories,
