@@ -1,25 +1,3 @@
-/* Content centering for the main content of the page */
-@media screen and (min-width: 960px) {
-    .content-centered {
-        max-width: 940px;
-        margin-top: 20px;
-        margin-bottom: auto;
-        margin-left: auto;
-        margin-right: auto;
-        text-align: center;
-    }
-}
-
-@media screen and (max-width: 960px) {
-    .content-centered {
-        max-width: 940px;
-        margin-top: 20px;
-        margin-bottom: auto;
-        margin-left: 25px;
-        margin-right: 25px;
-        text-align: center;
-    }
-}
 
 
 /* Centering */
@@ -29,28 +7,7 @@
     align-items: center;
 }
 
-/* Margin 10vw from edges of the screen */
-.margin-10vw {
-    margin-left: 10vw;
-    margin-right: 10vw;
-}
 
-/* google fonts */
-.material-icons.md-18 {
-    font-size: 18px;
-}
-
-.material-icons.md-24 {
-    font-size: 24px;
-}
-
-.material-icons.md-36 {
-    font-size: 36px;
-}
-
-.material-icons.md-48 {
-    font-size: 48px;
-}
 
 /* navbar sizing */
 @media screen and (min-width: 1000px) {
