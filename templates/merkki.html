@@ -7,6 +7,7 @@
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item">
+          <!-- check referring page if it is profile or patches -->
           {% if referrer == "profile" %}
             <a href="/profile">Profiili</a>
           {% else %}
@@ -18,12 +19,14 @@
     </nav>
     <div class="container">
       <div class="row custom-row">
-        <!-- tekstit vasemmalle -->
+        <!-- text on the left -->
         <div class="col-sm col-custom">
           <p>Merkin nimi: <b>{{ nimi }}</b></p>
           <p>Kategoria: <b>{{ category }}</b></p>
           <p>Merkin lisännyt käyttäjä: <b>{{ created_by_user }}</b></p>
           <br />
+          <!-- dont show this if referrer is profile, because it is already in the collection if  -->
+          {% if not referrer == "profile" %}
           <form action="/send/new/to_collection" method="POST">
             <input type="hidden" name="id" value="{{ id }}" />
             <input
@@ -35,9 +38,10 @@
               Lisää merkki kokoelmaasi
             </button>
           </form>
+          {% endif %}
           <div class="spacing-mobile"></div>
         </div>
-        <!-- kuva oikealle -->
+        <!-- picture on the right -->
         <div class="col-sm col-custom">
           {% if photo %}
             <img
