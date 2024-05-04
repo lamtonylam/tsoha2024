@@ -127,12 +127,15 @@ def merkki(id):
             referrer = "profile"
         elif "patches" in referring_page:
             referrer = "patches"
-    # if cant find referrer, redirect to 404
+    except:
+        pass
+    # Fetch patch name and user id of the patch
+    try:
+        patch_name = patch_view.get_patch_name(id)
     except Exception as e:
         print(e)
-        return redirect("/404")
-    # Fetch patch name and user id of the patch
-    patch_name = patch_view.get_patch_name(id)
+        flash("Merkkiä ei löytynyt", "error")
+        return redirect("/patches")
     created_by_user = patch_view.get_created_by_user(id)
     result_image = patch_view.get_image(id)
     comments = patch_view.get_comments(id)
