@@ -2,10 +2,10 @@ from sqlalchemy.sql import text
 from modules import users
 from db import db
 
-def user_submitted_patches():
-    sql = text("SELECT * FROM Patches WHERE created_by_user = :user_id")
+def user_submitted_patches_amount():
+    sql = text("SELECT COUNT(*) FROM Patches WHERE created_by_user = :user_id")
     result = db.session.execute(sql, {"user_id": users.user_id()})
-    return result.fetchall()
+    return(result.fetchall()[0][0])
 
 def own_patches():
     user_id = users.user_id()

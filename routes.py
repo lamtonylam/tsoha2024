@@ -357,7 +357,7 @@ def logout():
 def profile():
     username = users.get_username()
 
-    user_submitted_patches = profile_function.user_submitted_patches()
+    user_submitted_patches_amount = profile_function.user_submitted_patches_amount()
 
     own_patches_result = profile_function.own_patches()
 
@@ -375,7 +375,7 @@ def profile():
         username=username,
         own_patches_result=zip(own_patches_result, patch_images),
         patch_amount=len(own_patches_result),
-        user_submitted_amount=len(user_submitted_patches),
+        user_submitted_amount=(user_submitted_patches_amount),
     )
 
 
