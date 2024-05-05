@@ -57,9 +57,6 @@ Enable virtual environment
 `python3 -m venv venv`  
 `source venv/bin/activate`
 
-Install Flask  
-`pip install flask`
-
 Install dependencies  
 `pip install -r requirements.txt`
 
