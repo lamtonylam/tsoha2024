@@ -1,6 +1,7 @@
 """
 This module contains functions for user login, logut, register and user rights management.
 """
+
 from db import db
 from flask import session
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -8,6 +9,7 @@ from sqlalchemy import text
 import secrets
 
 from flask import flash, redirect, render_template
+
 
 def handle_login(request):
     if request.method == "GET":
@@ -22,6 +24,7 @@ def handle_login(request):
             return render_template(
                 "login.html", message="Väärä tunnus tai salasana", username=username
             )
+
 
 def login(username, password):
     sql = text("SELECT id, password, username FROM users WHERE username=:username")
@@ -45,7 +48,7 @@ def logout():
         del session["user_id"]
         del session["csrf_token"]
         flash("Olet kirjautunut ulos onnistuneesti", "success")
-        return redirect("/") 
+        return redirect("/")
     except Exception as e:
         print(e)
         flash("Uloskirjautuminen ei onnistunut", "error")

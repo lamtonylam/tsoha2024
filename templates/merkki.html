@@ -27,17 +27,17 @@
           <br />
           <!-- dont show this if referrer is profile, because it is already in the collection if  -->
           {% if not referrer == "profile" %}
-          <form action="/send/new/to_collection" method="POST">
-            <input type="hidden" name="id" value="{{ id }}" />
-            <input
-              type="hidden"
-              name="csrf_token"
-              value="{{ session.csrf_token }}"
-            />
-            <button type="submit" class="btn btn-primary">
-              Lisää merkki kokoelmaasi
-            </button>
-          </form>
+            <form action="/send/new/to_collection" method="POST">
+              <input type="hidden" name="id" value="{{ id }}" />
+              <input
+                type="hidden"
+                name="csrf_token"
+                value="{{ session.csrf_token }}"
+              />
+              <button type="submit" class="btn btn-primary">
+                Lisää merkki kokoelmaasi
+              </button>
+            </form>
           {% endif %}
           <div class="spacing-mobile"></div>
         </div>

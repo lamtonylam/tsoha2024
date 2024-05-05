@@ -303,9 +303,7 @@ def send():
                 sendpatch.insert_patch_into_generalcollection(name, userid, category)
             except Exception as e:
                 print(e)
-                flash(
-                    "Virhe tapahtui, merkin nimi on jo olemassa", "error"
-                )
+                flash("Virhe tapahtui, merkin nimi on jo olemassa", "error")
                 return render_template(
                     "new_merkki.html",
                     categories=categories,
@@ -320,9 +318,7 @@ def send():
                 if "Image is too large" in str(e):
                     flash("Kuvan maksimikoko on 10MB", "error")
                 elif "duplicate key value" in str(e):
-                    flash(
-                        "Virhe tapahtui, merkin nimi on jo olemassa", "error"
-                    )
+                    flash("Virhe tapahtui, merkin nimi on jo olemassa", "error")
                 return render_template(
                     "new_merkki.html",
                     categories=categories,

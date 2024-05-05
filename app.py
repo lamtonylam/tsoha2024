@@ -16,7 +16,8 @@ app.secret_key = getenv("SECRET_KEY")
 
 import routes
 
+
 @app.errorhandler(404)
 def page_not_found(e):
-    response = requests.get('https://http.cat/images/404.jpg')
-    return send_file(BytesIO(response.content), mimetype='image/jpeg')
+    response = requests.get("https://http.cat/images/404.jpg")
+    return send_file(BytesIO(response.content), mimetype="image/jpeg")

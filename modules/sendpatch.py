@@ -1,6 +1,7 @@
 """
 This module is used for inserting patches.
 """
+
 from sqlalchemy.sql import text
 from db import db
 from PIL import Image
@@ -14,11 +15,11 @@ def insert_patch_into_generalcollection(name, userid, category, file=None):
         # Read image data
         image_data = file.read()
         image = Image.open(BytesIO(image_data))
-        
+
         # check if image is larger than 10MB
         if len(image_data) > 10000000:
             raise ValueError("Image is too large. Maximum size is 10MB.")
-        
+
         # Rotate the image based on EXIF data
         image = ImageOps.exif_transpose(image)
 
