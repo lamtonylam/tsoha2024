@@ -1,5 +1,5 @@
 # tsoha2024
-
+Original app idea (not everthing was implemented and some functionalities changed during the course of development):
 - Overall patch dex, like PokeDex, but for collecting overall patches.
 - Users can log in and register.
 - Users can add patches to their collection. Data type include: name of patch, origin of patch (event or bought), maker of the patch ( for example a student guild), has it been sewed on yet
@@ -22,6 +22,10 @@
 - ✅ Comment functionality for patches
 - ✅ CSRF-vulnerability mitigated  
 - The project is almost finished, with minor final polishes only required. Minimum target of 5 database tables has been also achieved.
+
+##### Final deadline
+The app is functional no larger issues are present. After the second deadline no major features were implemented, and the commits largely included refactorings and minor UI changes.
+
 
 
 # Using app on the web
